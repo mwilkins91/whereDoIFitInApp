@@ -82,18 +82,8 @@ myApp.getLifeExpect = function() {
 			dataType: 'json',
 		})
 		.done(function(data) {
-			var timeObject = {};
-			var remainingTime = data.remaining_life_expectancy;
-			timeObject.yearsRemaining = Math.floor(remainingTime);
-			timeObject.daysRemaining = (remainingTime - timeObject.yearsRemaining) * 365;
-			timeObject.hoursRemaining = ((timeObject.daysRemaining - Math.floor(timeObject.daysRemaining)) * 24);
-			timeObject.minutesRemaining = (timeObject.hoursRemaining - Math.floor(timeObject.hoursRemaining)) * 60;
-			timeObject.secondsRemaining = Math.floor((timeObject.minutesRemaining - Math.floor(timeObject.minutesRemaining)) * 60);
-			timeObject.daysRemaining = Math.floor(timeObject.daysRemaining);
-			timeObject.hoursRemaining = Math.floor(timeObject.hoursRemaining);
-			timeObject.minutesRemaining = Math.floor(timeObject.minutesRemaining);
-			myApp.timeObject = timeObject;
-			myApp.parseTime(timeObject);
+			var milisecondsLeftInLife = data.remaining_life_expectancy * 3.154e+10;
+			myApp.getTimeRemaining(milisecondsLeftInLife);
 		})
 		.fail(function() {
 			console.log("error");
@@ -103,60 +93,31 @@ myApp.getLifeExpect = function() {
 		});
 }
 
-myApp.parseTime = function(timeObject) {
-	$('.lifeExpectResults').append('<div class="timeLeft"</div>');
-	$('div.timeLeft').append(
-		`
-		<div class="timeSegment">
-			<p class="years">${timeObject.yearsRemaining}</p>
-			<p class="timeSegmentTitle">Years</p>
-		</div>
-		<div class="timeSegment">
-			<p class="days">${timeObject.daysRemaining}</p>
-			<p class="timeSegmentTitle">Days</p>
-		</div>
-		<div class="timeSegment">
-			<p class="hours">${timeObject.hoursRemaining}</p>
-			<p class="timeSegmentTitle">Hours</p>
-		</div>
-		<div class="timeSegment">
-			<p class="minutes">${timeObject.minutesRemaining}</p>
-			<p class="timeSegmentTitle">Minutes</p>
-		</div>
-		<div class="timeSegment">
-			<p class="seconds">${timeObject.secondsRemaining}</p>
-			<p class="timeSegmentTitle">Seconds</p>
-		</div>
-		`)
-
-	myApp.timer = setInterval(function() { //TODO: REFACTOR this monstrosity
-		if (myApp.timeObject.secondsRemaining < 1) { //if out of seconds, go take from minutes...
-			if (myApp.timeObject.minutesRemaining < 1) { //if you came for minutes, but there are none, go to hours
-				if (myApp.timeObject.hoursRemaining < 1) { //if you came for hours, but there are none, go to dayss
-					if (myApp.timeObject.daysRemaining < 1) { //if you came for days, but there are none, go to years
-						if (myApp.timeObject.yearsRemaining < 1) { //if you came for years, but there are none, stop the countdown.
-							clearInterval(myApp.timer); //stops the countdown
-						}
-						myApp.timeObject.yearsRemaining--; //lower year
-						$('.years').text(myApp.timeObject.yearsRemaining); //update html to reflect year
-						myApp.timeObject.daysRemaining = 365; //adds a years worth of days to days.
-					}
-					myApp.timeObject.daysRemaining--;
-					$('.days').text(myApp.timeObject.daysRemaining);
-					myApp.timeObject.hoursRemaining = 24;
-				}
-				myApp.timeObject.hoursRemaining--;
-				$('.hours').text(myApp.timeObject.hoursRemaining);
-				myApp.timeObject.minutesRemaining = 60;
-			}
-			myApp.timeObject.minutesRemaining--;
-			$('.minutes').text(myApp.timeObject.minutesRemaining);
-			myApp.timeObject.secondsRemaining = 59;
-		}
-		$('.seconds').text(myApp.timeObject.secondsRemaining);
-		myApp.timeObject.secondsRemaining--;
-	}, 1000);
+myApp.getTimeRemaining = function(timeToAdd) {
+	var t = (Date.parse(myApp.todayDate) + timeToAdd) - Date.parse(new Date());
+	var seconds = Math.floor((t / 1000) % 60);
+	var minutes = Math.floor((t / 1000 / 60) % 60);
+	var hours = Math.floor((t / (1000 * 60 * 60)) % 24);
+	var days = Math.floor(t / (1000 * 60 * 60 * 24)) % 365;
+	var years = Math.floor(t / (1000 * 60 * 60 * 24 * 365));
+	console.log({
+		'total': t,
+		'years': years,
+		'days': days,
+		'hours': hours,
+		'minutes': minutes,
+		'seconds': seconds
+	})
+	return {
+		'total': t,
+		'years': years,
+		'days': days,
+		'hours': hours,
+		'minutes': minutes,
+		'seconds': seconds
+	};
 }
+
 
 
 myApp.init = function() {
