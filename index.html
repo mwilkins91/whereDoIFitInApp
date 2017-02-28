@@ -1,41 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title> PUT A TITLE HERE </title>
-	<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
-	<link rel="stylesheet" href="css/styles.css">
-</head>
-<body>
-
-<form action="post">
-	<label for="years">Years old</label>
-	<input id="years" class="years"	type="number" maxlength="2" placeholder="Enter your age in years">
-
-	<label for="months">Months since last birthday</label>
-	<input id="months" class="months" type="number" maxlength="2" placeholder="A number between 0 and 11">
-
-	<label for="male">Male</label>
-	<input class="gender" id="male" type="radio" name="gender" value="male" required>
-	
-	<label for="female">Female</label>
-	<input class="gender" id="female" type="radio" name="gender" value="female" required>
-
-	<label for="country">Country</label>
-	<select class="country" name="country" id="country">
-		<option value="">loading...</option>
-	</select>
-
-	<input class="lifeExpect" type="submit" value="How long do i gots?">
-</form>
-
-
-
-
-
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
-<script src="js/js.js"></script>	
-</body>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title> PUT A TITLE HERE </title>
+		<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+		<link rel="stylesheet" href="css/styles.css">
+	</head>
+	<body>
+		<section class="lifeExpect">
+			<form action="post">
+				<fieldset>
+					<legend>Age Information</legend>
+					<div>
+						<label for="years">Years old</label>
+						<input id="years" class="years"	type="number" maxlength="2" placeholder="Enter your age in years">
+					</div>
+					<div>
+						<label for="months">Months since last birthday</label>
+						<input id="months" class="months" type="number" maxlength="2" placeholder="A number between 0 and 11">
+					</div>
+				</fieldset>
+				<fieldset>
+					<legend>Gender Information</legend>
+					<label for="male">Male</label>
+					<input class="gender" id="male" type="radio" name="gender" value="male" required>
+					<label for="female">Female</label>
+					<input class="gender" id="female" type="radio" name="gender" value="female" required>
+				</fieldset>
+				<fieldset>
+					<legend>Country Information</legend>
+					<label for="country">Country</label>
+					<select class="country" name="country" id="country">
+						<option class="loading" value="">loading...</option>
+					</select>
+				</fieldset>
+				<input class="lifeExpect" type="submit" value="How long do i gots?">
+			</form>
+		</section>
+		<section class="lifeExpectResults">
+			
+		</section>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+		<script src="js/js.js"></script>
+	</body>
 </html>

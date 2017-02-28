@@ -1,0 +1,12 @@
+.timeLeft {
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-justify-content: space-around;
+      -ms-flex-pack: distribute;
+          justify-content: space-around;
+}
+
+.timeLeft .timeSegment {
+  text-align: center;
+}
