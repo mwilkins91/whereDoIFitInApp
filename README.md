@@ -1,0 +1,1 @@
+An API project for HackerYou (Project 4): An app that will compare the statistics of a person with those of other people of a similar age/gender in a different country, giving you a sense of your place in the world.
