@@ -8,8 +8,8 @@
 		<link rel="stylesheet" href="css/styles.css">
 	</head>
 	<body>
-		<section class="lifeExpect">
-			<form action="post">
+		<section class="userInfoInput">
+			<form class="userInfoInput__Form" action="post">
 				<fieldset>
 					<legend>Age Information</legend>
 					<div>
@@ -38,9 +38,35 @@
 				<input class="lifeExpect" type="submit" value="How long do i gots?">
 			</form>
 		</section>
-		<section class="lifeExpectResults">
-			
+		<main class="appArea">
+		<section class="userCountdown">
+			<p class="userYears">Years</p>
+			<p class="userDays">Days</p>
+			<p class="userHours">Hours</p>
+			<p class="userMinutes">Minutes</p>
+			<p class="userSeconds">Seconds</p>
 		</section>
+
+
+		<section class="otherPerson">
+			<form class="otherPerson__Form" action="post">
+				<label for="otherPersonCountry">Country</label>
+				<select class="country" name="otherPersonCountry" id="otherPersonCountry">
+					<option class="loading" value="">loading...</option>
+				</select>
+				<input type="submit" value="Fire it up!">
+			</form>
+			<div class="OtherPerson__Countdown">
+				<p class="otherPersonYears">Years</p>
+				<p class="otherPersonDays">Days</p>
+				<p class="otherPersonHours">Hours</p>
+				<p class="otherPersonMinutes">Minutes</p>
+				<p class="otherPersonSeconds">Seconds</p>
+			</div>
+		</section>
+		</main>
+
+
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
 		<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
 		<script src="js/js.js"></script>
