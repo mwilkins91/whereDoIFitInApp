@@ -14,11 +14,6 @@ myApp.events = function() {
 	$('.otherPerson__Form').on('submit', function(event) {
 		event.preventDefault();
 		myApp.getDateOfDeath('otherPerson');
-		$.when(myApp.otherPersonInfo.dateOfDeath)
-			.done(function() {
-				console.log('countdown fired!');
-				myApp.startCountdown(myApp.otherPersonInfo.dateOfDeath, 'otherPerson');
-			})
 	});
 }
 
@@ -32,20 +27,16 @@ myApp.startCountdown = function(dateOfDeath, who) {
 			$('p.userHours').html('<span class="timeTitle">Hours: </span><span class="timeCounter">' + myApp.userInfo.countdown.hours + '</span>');
 			$('p.userDays').html('<span class="timeTitle">Days: </span><span class="timeCounter">' + myApp.userInfo.countdown.days + '</span>');
 			$('p.userYears').html('<span class="timeTitle">Years: </span><span class="timeCounter">' + myApp.userInfo.countdown.years + '</span>');
-
+			if (myApp.otherPersonInfo.timerEngaged === true) {
+				myApp.otherPersonInfo.countdown = myApp.getTimeRemaining(myApp.otherPersonInfo.dateOfDeath);
+				$('p.otherPersonSeconds').html('<span class="timeTitle">Seconds: </span><span class="timeCounter">' + myApp.otherPersonInfo.countdown.seconds + '</span>');
+				$('p.otherPersonMinutes').html('<span class="timeTitle">Minutes: </span><span class="timeCounter">' + myApp.otherPersonInfo.countdown.minutes + '</span>');
+				$('p.otherPersonHours').html('<span class="timeTitle">Hours: </span><span class="timeCounter">' + myApp.otherPersonInfo.countdown.hours + '</span>');
+				$('p.otherPersonDays').html('<span class="timeTitle">Days: </span><span class="timeCounter">' + myApp.otherPersonInfo.countdown.days + '</span>');
+				$('p.otherPersonYears').html('<span class="timeTitle">Years: </span><span class="timeCounter">' + myApp.otherPersonInfo.countdown.years + '</span>');
+			}
 		}, 1000);
 
-	} else {
-		// console.log('HELLO',dateOfDeath);
-		myApp.countDowns.other = setInterval(function() {
-			myApp.otherPersonInfo.countdown = myApp.getTimeRemaining(dateOfDeath);
-			$('p.otherPersonSeconds').html('<span class="timeTitle">Seconds: </span><span class="timeCounter">' + myApp.otherPersonInfo.countdown.seconds + '</span>');
-			$('p.otherPersonMinutes').html('<span class="timeTitle">Minutes: </span><span class="timeCounter">' + myApp.otherPersonInfo.countdown.minutes + '</span>');
-			$('p.otherPersonHours').html('<span class="timeTitle">Hours: </span><span class="timeCounter">' + myApp.otherPersonInfo.countdown.hours + '</span>');
-			$('p.otherPersonDays').html('<span class="timeTitle">Days: </span><span class="timeCounter">' + myApp.otherPersonInfo.countdown.days + '</span>');
-			$('p.otherPersonYears').html('<span class="timeTitle">Years: </span><span class="timeCounter">' + myApp.otherPersonInfo.countdown.years + '</span>');
-
-		}, 1000);
 	}
 }
 
@@ -67,28 +58,58 @@ myApp.getDate = function() {
 }
 
 myApp.getCountries = function() {
-	var countriesArray = $.ajax({
+	myApp.getCountriesCheck = $.ajax({
 			url: 'http://api.population.io:80/1.0/countries',
 			type: 'GET',
 			dataType: 'json',
 
 		})
-		.then(function(countriesArray) {
+		.done(function(countriesArray) {
 			myApp.parseCountries(countriesArray['countries']);
 			// console.log(countriesArray['countries'])
 		});
+
+
+
+	myApp.teleportCountriesCheck = $.ajax({
+			url: 'https://api.teleport.org/api/countries/',
+			type: 'GET',
+			dataType: 'JSON',
+
+		})
+		.done(function(teleportCountries) {
+			myApp.parseTeleportCountries(teleportCountries._links["country:items"]);
+
+		})
+		.fail(function() {
+			console.log("error");
+		})
+		.always(function() {
+			console.log("complete");
+		});
+
 }
 
 myApp.parseCountries = function(arrayOfCountries) {
 	var countries = {};
 	for (var i = 0; i < arrayOfCountries.length; i++) {
-		$('.country').append('<option val="' + arrayOfCountries[i].replace(/\s/gi, '_') + '">' + arrayOfCountries[i] + '</option>')
 		countries[arrayOfCountries[i]] = arrayOfCountries[i];
 	}
 	$('.loading').remove();
 	myApp.countries.objectFormat = countries;
 	myApp.countries.arrayFormat = arrayOfCountries;
+	// myApp.countries.checkOne = true;
 	return 'countries updated';
+}
+
+myApp.parseTeleportCountries = function(teleportCountries) {
+	var teleportCountriesObject = {};
+	for (var i = 0; i < teleportCountries.length; i++) {
+		teleportCountriesObject[teleportCountries[i].name] = teleportCountries[i]
+	}
+	myApp.countries.teleportCountriesObject = teleportCountriesObject;
+	myApp.countries.teleportCountriesArray = teleportCountries;
+	// myApp.countries.teleportCheck = true;
 }
 
 myApp.getUserInfo = function() {
@@ -105,14 +126,15 @@ myApp.getUserInfo = function() {
 
 	myApp.userInfo = userInfo;
 	myApp.otherPersonInfo = {};
+	myApp.otherPersonInfo.timerEngaged = false;
+
 	return userInfo;
 };
 
 myApp.getDateOfDeath = function(who) { //need to get even when for other person to fire only when this is done... currently firing in wrong order!
-	if(who === 'user'){
+	if (who === 'user') {
 		var personInfo = myApp.getUserInfo();
-	}
-	else {
+	} else {
 		var personInfo = myApp.userInfo;
 		personInfo.country = $('.otherPerson__Form .country').val();
 	}
@@ -126,9 +148,9 @@ myApp.getDateOfDeath = function(who) { //need to get even when for other person 
 			if (who === 'user') {
 				myApp.userInfo.dateOfDeath = dateOfDeath;
 			} else {
-				console.log('got the date of deTH!');
-
 				myApp.otherPersonInfo.dateOfDeath = dateOfDeath;
+				myApp.otherPersonInfo.timerEngaged = true;
+				// myApp.startCountdown(myApp.otherPersonInfo.dateOfDeath, 'otherPerson');
 			}
 		})
 		.fail(function() {
@@ -161,6 +183,29 @@ myApp.getTimeRemaining = function(dateOfDeath) { //takes date of death in Epoch 
 myApp.init = function() {
 	myApp.getCountries();
 	myApp.todayDate = myApp.getDate();
+	$.when(myApp.teleportCountriesCheck, myApp.getCountriesCheck)
+		.done(function() {
+			var combinedArray = myApp.countries.arrayFormat.map(function(country) {
+				if (myApp.countries.teleportCountriesObject[country] !== undefined) {
+					return myApp.countries.teleportCountriesObject[country]
+				} else {
+					return '';
+				}
+
+			})
+			var finalizedCountries = combinedArray.filter(function(item) {
+				return !(typeof item === 'string');
+			})
+			const finalCountryObject = {};
+			for (var i = 0; i < finalizedCountries.length; i++) {
+				finalCountryObject[finalizedCountries[i].name] = finalizedCountries[i];
+			}
+			myApp.finalCountryList = finalCountryObject;
+			for(country in myApp.finalCountryList) {
+				$('.country').append('<option val="' + myApp.finalCountryList[country].name.replace(/\s/gi, '_') + '">' + myApp.finalCountryList[country].name + '</option>')
+				
+			}
+		});
 	myApp.events();
 
 }
