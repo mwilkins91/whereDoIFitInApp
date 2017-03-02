@@ -13,7 +13,13 @@ myApp.events = function() {
 	});
 	$('.otherPerson__Form').on('submit', function(event) {
 		event.preventDefault();
+		myApp.otherPersonInfo.country = $('.otherPerson__Form .country').val();
+		$('.otherPersonTitle').text(`If you lived in ${myApp.otherPersonInfo.country}`)
 		myApp.getDateOfDeath('otherPerson');
+	});
+	$('button.loadMore').on('click', function(event) {
+		event.preventDefault();
+		myApp.loadPhaseTwo();
 	});
 }
 
@@ -112,6 +118,27 @@ myApp.parseTeleportCountries = function(teleportCountries) {
 	// myApp.countries.teleportCheck = true;
 }
 
+myApp.createMasterCountryList = function() {
+	var combinedArray = myApp.countries.arrayFormat.map(function(country) {
+		if (myApp.countries.teleportCountriesObject[country] !== undefined) {
+			return myApp.countries.teleportCountriesObject[country]
+		} else {
+			return '';
+		}
+	})
+	var finalizedCountries = combinedArray.filter(function(item) {
+		return !(typeof item === 'string');
+	})
+	const finalCountryObject = {};
+	for (var i = 0; i < finalizedCountries.length; i++) {
+		finalCountryObject[finalizedCountries[i].name] = finalizedCountries[i];
+	}
+	myApp.finalCountryList = finalCountryObject;
+	for (country in myApp.finalCountryList) {
+		$('.country').append('<option val="' + myApp.finalCountryList[country].name.replace(/\s/gi, '_') + '">' + myApp.finalCountryList[country].name + '</option>');
+	}
+};
+
 myApp.getUserInfo = function() {
 	var userInfo = {};
 	var userYears = $('.years').val();
@@ -135,7 +162,7 @@ myApp.getDateOfDeath = function(who) { //need to get even when for other person 
 	if (who === 'user') {
 		var personInfo = myApp.getUserInfo();
 	} else {
-		var personInfo = myApp.userInfo;
+		var personInfo = Object.assign({},myApp.userInfo);
 		personInfo.country = $('.otherPerson__Form .country').val();
 	}
 	myApp.userInfo.dateOfDeathCheck = $.ajax({
@@ -178,33 +205,19 @@ myApp.getTimeRemaining = function(dateOfDeath) { //takes date of death in Epoch 
 	};
 }
 
+myApp.loadPhaseTwo = function() {
 
+	$('.otherPerson__Form').fadeOut('slow');
+	console.log(myApp.otherPersonInfo.country)
+	console.log(myApp.userInfo.country);
+}
 
 myApp.init = function() {
 	myApp.getCountries();
 	myApp.todayDate = myApp.getDate();
 	$.when(myApp.teleportCountriesCheck, myApp.getCountriesCheck)
 		.done(function() {
-			var combinedArray = myApp.countries.arrayFormat.map(function(country) {
-				if (myApp.countries.teleportCountriesObject[country] !== undefined) {
-					return myApp.countries.teleportCountriesObject[country]
-				} else {
-					return '';
-				}
-
-			})
-			var finalizedCountries = combinedArray.filter(function(item) {
-				return !(typeof item === 'string');
-			})
-			const finalCountryObject = {};
-			for (var i = 0; i < finalizedCountries.length; i++) {
-				finalCountryObject[finalizedCountries[i].name] = finalizedCountries[i];
-			}
-			myApp.finalCountryList = finalCountryObject;
-			for(country in myApp.finalCountryList) {
-				$('.country').append('<option val="' + myApp.finalCountryList[country].name.replace(/\s/gi, '_') + '">' + myApp.finalCountryList[country].name + '</option>')
-				
-			}
+			myApp.createMasterCountryList();
 		});
 	myApp.events();
 
