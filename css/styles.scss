@@ -28,10 +28,20 @@ main {
 	display: none;
 }
 
-.jobChart__container{
+section.maleVsFemalerPop {
+	display: flex;
+}
+.chart__container{
 	height: 400px;
-	.jobChart {
+	margin: 20px 0;
+	&.maleVsFemalerPop__container {
+		width: 50%;
+	}
+	.chart {
 		width: 100%;
 		height: 400px;
+		&.maleVsFemalerPopChart {
+			width: 50%;
+		}
 	}
 }

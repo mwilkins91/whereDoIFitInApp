@@ -30,11 +30,26 @@ main {
   display: none;
 }
 
-.jobChart__container {
+section.maleVsFemalerPop {
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.chart__container {
+  height: 400px;
+  margin: 20px 0;
+}
+
+.chart__container.maleVsFemalerPop__container {
+  width: 50%;
+}
+
+.chart__container .chart {
+  width: 100%;
   height: 400px;
 }
 
-.jobChart__container .jobChart {
-  width: 100%;
-  height: 400px;
+.chart__container .chart.maleVsFemalerPopChart {
+  width: 50%;
 }
