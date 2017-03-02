@@ -40,7 +40,8 @@
 		</section>
 		<main class="appArea">
 		<div class="appArea__Flex wrapper">
-			<section class="userCountdown">
+			<section class="userCountdown countdown">
+			<h2 class="userPersonTitle">Your life left:</h2>
 				<p class="userYears">Years</p>
 				<p class="userDays">Days</p>
 				<p class="userHours">Hours</p>
@@ -48,7 +49,8 @@
 				<p class="userSeconds">Seconds</p>
 			</section>
 			<section class="otherPerson">
-				<div class="OtherPerson__Countdown">
+			<h2 class="otherPersonTitle">Select a Country Below</h2>
+				<div class="OtherPerson__Countdown countdown">
 					<p class="otherPersonYears">Years</p>
 					<p class="otherPersonDays">Days</p>
 					<p class="otherPersonHours">Hours</p>
@@ -68,12 +70,25 @@
 			</section>
 		</div>
 			<button class="loadMore">Click here to find out more</button>
-		<section class="moreAppInfo">
-			
+		<section class="jobInfo">
+			<form action="post" class="jobInfo__form">
+				<fieldset>
+				<legend>Select a career to compare</legend>
+					<label for="jobInfo__select">Country</label>
+					<select class="jobInfo__select" name="jobInfo__select" id="jobInfo__select">
+						<option class="jobLoading" value="">loading...</option>
+					</select>
+					<input type="submit" value="What's the diff?">
+				</fieldset>
+			</form>
+			<div class="jobChart__container">
+				<canvas id="jobChart" class="jobChart"></canvas>
+			</div>
 		</section>
 		</main>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
 		<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
 		<script src="js/js.js"></script>
 	</body>
 </html>

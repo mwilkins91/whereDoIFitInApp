@@ -21,7 +21,14 @@ myApp.events = function() {
 		event.preventDefault();
 		myApp.loadPhaseTwo();
 	});
-}
+	$('.jobInfo__form').on('submit', function(event) {
+		event.preventDefault();
+		let selectedJob = $('.jobInfo__select').val().replace(/_/gi, ' ');
+		// console.log(selectedJob)
+		myApp.chartJobs(myApp.jobSalariesList[selectedJob]);
+
+	});
+};
 
 myApp.startCountdown = function(dateOfDeath, who) {
 	if (who === "user") {
@@ -44,7 +51,7 @@ myApp.startCountdown = function(dateOfDeath, who) {
 		}, 1000);
 
 	}
-}
+};
 
 myApp.getDate = function() {
 	var today = new Date();
@@ -61,7 +68,7 @@ myApp.getDate = function() {
 	}
 	myApp.dateObject = today;
 	return `${yyyy}-${mm}-${dd}`;
-}
+};
 
 myApp.getCountries = function() {
 	myApp.getCountriesCheck = $.ajax({
@@ -93,8 +100,7 @@ myApp.getCountries = function() {
 		.always(function() {
 			console.log("complete");
 		});
-
-}
+};
 
 myApp.parseCountries = function(arrayOfCountries) {
 	var countries = {};
@@ -106,7 +112,7 @@ myApp.parseCountries = function(arrayOfCountries) {
 	myApp.countries.arrayFormat = arrayOfCountries;
 	// myApp.countries.checkOne = true;
 	return 'countries updated';
-}
+};
 
 myApp.parseTeleportCountries = function(teleportCountries) {
 	var teleportCountriesObject = {};
@@ -116,7 +122,7 @@ myApp.parseTeleportCountries = function(teleportCountries) {
 	myApp.countries.teleportCountriesObject = teleportCountriesObject;
 	myApp.countries.teleportCountriesArray = teleportCountries;
 	// myApp.countries.teleportCheck = true;
-}
+};
 
 myApp.createMasterCountryList = function() {
 	var combinedArray = myApp.countries.arrayFormat.map(function(country) {
@@ -146,6 +152,7 @@ myApp.getUserInfo = function() {
 	var userGender = $('.gender:checked').val();
 
 	userInfo.userAge = `${userYears}y${userMonths}m`;
+	userInfo.ageYears = userYears;
 	userInfo.currentDate = myApp.todayDate;
 	userInfo.country = $('.userInfoInput__Form .country').val().replace(/_/gi, ' ');
 	userInfo.gender = userGender;
@@ -162,7 +169,7 @@ myApp.getDateOfDeath = function(who) { //need to get even when for other person 
 	if (who === 'user') {
 		var personInfo = myApp.getUserInfo();
 	} else {
-		var personInfo = Object.assign({},myApp.userInfo);
+		var personInfo = Object.assign({}, myApp.userInfo);
 		personInfo.country = $('.otherPerson__Form .country').val();
 	}
 	myApp.userInfo.dateOfDeathCheck = $.ajax({
@@ -186,7 +193,7 @@ myApp.getDateOfDeath = function(who) { //need to get even when for other person 
 		.always(function() {
 			console.log("complete");
 		});
-}
+};
 
 myApp.getTimeRemaining = function(dateOfDeath) { //takes date of death in Epoch time
 	var t = dateOfDeath - Date.parse(new Date());
@@ -203,14 +210,165 @@ myApp.getTimeRemaining = function(dateOfDeath) { //takes date of death in Epoch 
 		'minutes': minutes,
 		'seconds': seconds
 	};
+};
+
+myApp.getSalaryInfo = function(countryHREF) {
+	return $.ajax({
+			url: countryHREF,
+			type: 'GET',
+			dataType: 'JSON',
+			// data: {param1: 'value1'},
+		})
+		.done(function() {
+			console.log("success");
+		})
+		.fail(function() {
+			console.log("error");
+		})
+		.always(function() {
+			console.log("complete");
+		});
+
+}
+
+myApp.createMasterSalariesList = function(leftData, rightData) {
+	const leftCountry = myApp.userInfo.country;
+	const rightCountry = myApp.otherPersonInfo.country;
+	const leftSalaries = leftData[0].salaries;
+	const rightSalaries = rightData[0].salaries;
+	const salariesList = {};
+	for (job in leftSalaries) {
+		let jobTitle = leftSalaries[job]['job']['title'];
+		let jobSalaries = leftSalaries[job]['salary_percentiles'];
+		salariesList[jobTitle] = {};
+		salariesList[jobTitle]['title'] = jobTitle;
+		salariesList[jobTitle][leftCountry] = {};
+		salariesList[jobTitle][rightCountry] = {};
+		salariesList[jobTitle][leftCountry] = jobSalaries;
+		let jobSalariesRight = rightSalaries[job]['salary_percentiles'];
+		salariesList[jobTitle][rightCountry] = jobSalariesRight;
+	}
+	myApp.jobSalariesList = salariesList;
+	myApp.getAverageSalary();
+	myApp.populateJobList();
+};
+
+myApp.getAverageSalary = function() {
+	const leftCountry = myApp.userInfo.country;
+	const rightCountry = myApp.otherPersonInfo.country;
+	let runningTotalLeft = 0;
+	let runningTotalRight = 0;
+	let counter = 0;
+	for (job in myApp.jobSalariesList) {
+		runningTotalLeft = runningTotalLeft + myApp.jobSalariesList[job][leftCountry]['percentile_50'];
+		runningTotalRight = runningTotalRight + myApp.jobSalariesList[job][rightCountry]['percentile_50'];
+		counter++;
+	}
+	let averageLeft = runningTotalLeft / counter;
+	let averageRight = runningTotalRight / counter;
+	myApp.jobSalariesList['Overall Average'] = {};
+	myApp.jobSalariesList['Overall Average'][leftCountry] = averageLeft;
+	myApp.jobSalariesList['Overall Average'][rightCountry] = averageRight;
+	myApp.jobSalariesList['Overall Average'].title = 'Overall Average';
+}
+
+myApp.populateJobList = function() {
+	for (job in myApp.jobSalariesList) {
+		$('.jobInfo__select').append('<option val="' + myApp.jobSalariesList[job].title.replace(/\s/gi, '_') + '">' + myApp.jobSalariesList[job].title + '</option>')
+	}
+	$('.jobLoading').remove();
+}
+
+myApp.chartJobs = function(job) {
+	$('.jobChart__container').html('<canvas id="jobChart" class="jobChart"></canvas>');
+	let whereToPutChart = $('#jobChart');
+	let leftCountry = myApp.userInfo.country;
+	let rightCountry = myApp.otherPersonInfo.country;
+	let jobTitle;
+	if (job === undefined) {
+		jobTitle = 'Overall Average'
+	} else {
+		jobTitle = job.title;
+	}
+	if (jobTitle === 'Overall Average') {
+		dataArray = [Math.floor(myApp.jobSalariesList[jobTitle][leftCountry]), Math.floor(myApp.jobSalariesList[jobTitle][rightCountry])];
+	} else {
+		dataArray = [Math.floor(myApp.jobSalariesList[jobTitle][leftCountry]['percentile_50']), Math.floor(myApp.jobSalariesList[jobTitle][rightCountry]['percentile_50'])];
+	}
+	var jobChart = new Chart(whereToPutChart, {
+		type: 'bar',
+		data: {
+			labels: [leftCountry, rightCountry],
+			datasets: [{
+				label: 'Average Salary',
+				data: dataArray,
+				backgroundColor: [
+					'rgba(255, 99, 132, 0.2)',
+					'rgba(54, 162, 235, 0.2)'
+				],
+				borderColor: [
+					'rgba(255,99,132,1)',
+					'rgba(54, 162, 235, 1)',
+				],
+				borderWidth: 2
+			}]
+		},
+		options: {
+			scales: {
+				yAxes: [{
+					ticks: {
+						beginAtZero: true
+					}
+				}]
+			},
+			title: {
+				display: true,
+				text: jobTitle + " Salary",
+				fontSize: 24
+			},
+			legend: {
+				display: false
+			},
+			maintainAspectRatio: false,
+			responsive: true
+		},
+	});
+}
+
+myApp.getYourAgePop = function(country, age) {
+	return $.ajax({
+		url: `http://api.population.io:80/1.0/population/${myApp.dateObject.getFullYear()}/${country}/${age}/`,
+		type: 'GET',
+		dataType: 'JSON',
+	})
+	.done(function() {
+		console.log("success");
+	})
+	.fail(function() {
+		console.log("error");
+	})
+	.always(function() {
+		console.log("complete");
+	});
+	
 }
 
 myApp.loadPhaseTwo = function() {
-
 	$('.otherPerson__Form').fadeOut('slow');
-	console.log(myApp.otherPersonInfo.country)
-	console.log(myApp.userInfo.country);
-}
+	const countryLeftCheck = myApp.getSalaryInfo(myApp.finalCountryList[myApp.userInfo.country].href + 'salaries');
+	const countryRightCheck = myApp.getSalaryInfo(myApp.finalCountryList[myApp.otherPersonInfo.country].href + 'salaries');
+	$.when(countryLeftCheck, countryRightCheck).done((leftData, rightData) => {
+		myApp.createMasterSalariesList(leftData, rightData);
+		myApp.chartJobs(); //starts chart with overall
+		$('.jobInfo').fadeIn('slow');
+	});
+	const leftCountryYourAgePopCheck = myApp.getYourAgePop(myApp.userInfo.country, myApp.userInfo.ageYears)
+	const rightCountryYourAgePopCheck = myApp.getYourAgePop(myApp.otherPersonInfo.country, myApp.userInfo.ageYears)
+	$.when(leftCountryYourAgePopCheck, rightCountryYourAgePopCheck).done((leftData, rightData) => {
+		//make chart
+	})
+	)
+};
 
 myApp.init = function() {
 	myApp.getCountries();
@@ -220,8 +378,7 @@ myApp.init = function() {
 			myApp.createMasterCountryList();
 		});
 	myApp.events();
-
-}
+};
 
 $(function() {
 	myApp.init();
