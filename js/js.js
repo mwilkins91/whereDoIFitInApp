@@ -337,20 +337,157 @@ myApp.chartJobs = function(job) {
 
 myApp.getYourAgePop = function(country, age) {
 	return $.ajax({
-		url: `http://api.population.io:80/1.0/population/${myApp.dateObject.getFullYear()}/${country}/${age}/`,
-		type: 'GET',
-		dataType: 'JSON',
-	})
-	.done(function() {
-		console.log("success");
-	})
-	.fail(function() {
-		console.log("error");
-	})
-	.always(function() {
-		console.log("complete");
+			url: `http://api.population.io:80/1.0/population/${myApp.dateObject.getFullYear()}/${country}/${age}/`,
+			type: 'GET',
+			dataType: 'JSON',
+		})
+		.done(function() {
+			console.log("success");
+		})
+		.fail(function() {
+			console.log("error");
+		})
+		.always(function() {
+			console.log("complete");
+		});
+}
+
+myApp.chartAgeGenderPop = function(leftGenderPop, rightGenderPop) {
+	$('.ageGenderPopChart__container').html('<canvas id="ageGenderPopChart" class="ageGenderPopChart"></canvas>');
+	let whereToPutChart = $('#ageGenderPopChart');
+	let leftCountry = myApp.userInfo.country;
+	let rightCountry = myApp.otherPersonInfo.country;
+	let capitalizedGender = myApp.userInfo.gender.charAt(0).toUpperCase() + myApp.userInfo.gender.slice(1);
+
+
+	var ageGenderPopChart = new Chart(whereToPutChart, {
+		type: 'bar',
+		data: {
+			labels: [leftCountry, rightCountry],
+			datasets: [{
+				label: 'Population of ' + myApp.userInfo.ageYears + 'year old ' + myApp.userInfo.gender + 's',
+				data: [leftGenderPop, rightGenderPop],
+				backgroundColor: [
+					'rgba(255, 99, 132, 0.2)',
+					'rgba(54, 162, 235, 0.2)'
+				],
+				borderColor: [
+					'rgba(255,99,132,1)',
+					'rgba(54, 162, 235, 1)',
+				],
+				borderWidth: 2
+			}]
+		},
+		options: {
+			scales: {
+				yAxes: [{
+					ticks: {
+						beginAtZero: true
+					}
+				}]
+			},
+			title: {
+				display: true,
+				text: 'Population of ' + myApp.userInfo.ageYears + ' Year Old ' + capitalizedGender + 's',
+				fontSize: 24
+			},
+			legend: {
+				display: false
+			},
+			maintainAspectRatio: false,
+			responsive: true
+		},
 	});
-	
+}
+
+myApp.chartGenBreakdown = function(allLeftGenData, leftOrRight) {
+	let whereToPutChart;
+	if (leftOrRight == 'left') {
+		whereToPutChart = $('#maleVsFemalerPopChartLeft');
+	} else {
+		whereToPutChart = $('#maleVsFemalerPopChartRight');
+	}
+	let leftCountry = myApp.userInfo.country;
+	let rightCountry = myApp.otherPersonInfo.country;
+	var maleVsFemalerPopChart = new Chart(whereToPutChart, {
+		type: 'pie',
+		data: {
+			labels: [myApp.userInfo.ageYears + 'Year Old Males', myApp.userInfo.ageYears + 'Year Old Females'],
+			datasets: [{
+				label: 'Population of ' + myApp.userInfo.ageYears + 'year old ' + myApp.userInfo.gender + 's',
+				data: [allLeftGenData['males'], allLeftGenData['females']],
+				backgroundColor: [
+					'rgba(54, 162, 235, 0.2)',
+					'rgba(255, 99, 132, 0.2)',
+				],
+				borderColor: [
+					'rgba(54, 162, 235, 1)',
+					'rgba(255,99,132,1)',
+				],
+				borderWidth: 2
+			}]
+		},
+		options: {
+			title: {
+				display: true,
+				text: 'Male and Female Population Breakdown',
+				fontSize: 24
+			},
+			legend: {
+				display: false
+			},
+			maintainAspectRatio: false,
+			responsive: true
+		},
+	});
+}
+
+myApp.getGlobalAgePop = function() {
+	return $.ajax({
+			url: `http://api.population.io:80/1.0/population/${myApp.dateObject.getFullYear()}/aged/${myApp.userInfo.ageYears}/`,
+			type: 'GET',
+			dataType: 'JSON',
+		})
+		.done(function() {
+			console.log("success");
+		})
+		.fail(function() {
+			console.log("error");
+		})
+		.always(function() {
+			console.log("complete");
+		});
+}
+
+myApp.createGlobalAgePopDataArrays = function() {
+	myApp.globalAgePopArrays = {};
+	myApp.globalAgePopArrays.males = {}
+	myApp.globalAgePopArrays.males.labels = [];
+	myApp.globalAgePopArrays.males.numbers = [];
+	myApp.globalAgePopArrays.females = {}
+	myApp.globalAgePopArrays.females.labels = [];
+	myApp.globalAgePopArrays.females.numbers = [];
+
+	for (country in myApp.finalCountryList) {
+		let countryLabel = myApp.finalCountryList[country].name;
+		let countryMalePop = myApp.finalCountryList[country].populationOfAge.males;
+		let countryFemalePop = myApp.finalCountryList[country].populationOfAge.females;
+		let maleDataArray = myApp.globalAgePopArrays.males.numbers;
+		let femaleDataArray = myApp.globalAgePopArrays.females.numbers;
+		let maleLabelArray = myApp.globalAgePopArrays.males.labels;
+		let femaleLabelArray = myApp.globalAgePopArrays.females.labels;
+		if (!(countryLabel === myApp.userInfo.country)) {
+			femaleLabelArray.push(countryLabel);
+			maleLabelArray.push(countryLabel);
+			maleDataArray.push(countryMalePop);
+			femaleDataArray.push(countryFemalePop)
+		};
+	}
+	myApp.globalAgePopArrays.males.labels.unshift(myApp.userInfo.country);
+	myApp.globalAgePopArrays.females.labels.unshift(myApp.userInfo.country);
+	myApp.globalAgePopArrays.males.numbers.unshift(myApp.finalCountryList[myApp.userInfo.country].populationOfAge.males);
+	myApp.globalAgePopArrays.females.numbers.unshift(myApp.finalCountryList[myApp.userInfo.country].populationOfAge.females);
+	console.log(myApp.globalAgePopArrays);
 }
 
 myApp.loadPhaseTwo = function() {
@@ -365,9 +502,35 @@ myApp.loadPhaseTwo = function() {
 	const leftCountryYourAgePopCheck = myApp.getYourAgePop(myApp.userInfo.country, myApp.userInfo.ageYears)
 	const rightCountryYourAgePopCheck = myApp.getYourAgePop(myApp.otherPersonInfo.country, myApp.userInfo.ageYears)
 	$.when(leftCountryYourAgePopCheck, rightCountryYourAgePopCheck).done((leftData, rightData) => {
-		//make chart
+		let leftGenderPop;
+		let rightGenderPop;
+		if (myApp.userInfo.gender == 'male') {
+			leftGenderPop = leftData[0][0]['males'];
+			rightGenderPop = rightData[0][0]['males'];
+		} else {
+			leftGenderPop = leftData[0][0]['females'];
+			rightGenderPop = rightData[0][0]['females'];
+		}
+		myApp.chartAgeGenderPop(leftGenderPop, rightGenderPop)
+		let allLeftGenData = leftData[0][0];
+		let allRightGenData = rightData[0][0];
+		myApp.chartGenBreakdown(allLeftGenData, 'left');
+		myApp.chartGenBreakdown(allRightGenData, 'right');
 	})
-	)
+	const globalCompareCheck = myApp.getGlobalAgePop();
+	$.when(globalCompareCheck).done((data) => {
+		data.forEach((country) => {
+			if (myApp.finalCountryList[country['country']] === undefined) {
+				console.log('no data on' + country['country'])
+			} else {
+				myApp.finalCountryList[country['country']].populationOfAge = {};
+				myApp.finalCountryList[country['country']].populationOfAge.males = country.males;
+				myApp.finalCountryList[country['country']].populationOfAge.females = country.females;
+			} //adds pop data for age group to finalCountryList
+		});
+		myApp.createGlobalAgePopDataArrays();
+	});
+
 };
 
 myApp.init = function() {
