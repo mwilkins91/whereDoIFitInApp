@@ -493,10 +493,10 @@ myApp.createGlobalAgePopDataArrays = function() {
 	myApp.globalAgePopArrays.females.numbers.unshift(myApp.finalCountryList[myApp.userInfo.country].populationOfAge.females);
 }
 
-myApp.makeColourArray = function(dataArray, colour){
+myApp.makeColourArray = function(dataArray, colour) {
 	let returnArray = [];
 	dataArray.forEach((item) => returnArray.push(colour)); //make a grey entry for each country that will be on the graph
-	returnArray.pop();//drop off 2 greys for the 2 coloured countries.
+	returnArray.pop(); //drop off 2 greys for the 2 coloured countries.
 	returnArray.pop();
 	return returnArray;
 }
@@ -522,7 +522,7 @@ myApp.chartGenGlobalAgePopData = function() {
 		data: {
 			labels: genderLabels,
 			datasets: [{
-				label: 'Population of ' + myApp.userInfo.ageYears +  ' Year Old ' + myApp.userInfo.gender + 's.',
+				label: 'Population of ' + myApp.userInfo.ageYears + ' Year Old ' + myApp.userInfo.gender + 's.',
 				data: genderData,
 				backgroundColor: [
 					'rgba(255, 99, 132, 0.2)',
@@ -540,7 +540,7 @@ myApp.chartGenGlobalAgePopData = function() {
 		options: {
 			title: {
 				display: true,
-				text: 'Global population of '  + myApp.userInfo.ageYears +  ' Year Old ' + myApp.userInfo.gender + 's.',
+				text: 'Global population of ' + myApp.userInfo.ageYears + ' Year Old ' + myApp.userInfo.gender + 's.',
 				fontSize: 24
 			},
 			legend: {
@@ -554,21 +554,72 @@ myApp.chartGenGlobalAgePopData = function() {
 
 myApp.getTotalPopulation = function() {
 	return $.ajax({
-		url: `http://api.population.io:80/1.0/population/World/${myApp.todayDate}/`,
-		type: 'GET',
-		dataType: 'JSON',
-	})
-	.done(function() {
-		console.log("success");
-	})
-	.fail(function() {
-		console.log("error");
-	})
-	.always(function() {
-		console.log("complete");
-	});
-	
+			url: `http://api.population.io:80/1.0/population/World/${myApp.todayDate}/`,
+			type: 'GET',
+			dataType: 'JSON',
+		})
+		.done(function() {
+			console.log("success");
+		})
+		.fail(function() {
+			console.log("error");
+		})
+		.always(function() {
+			console.log("complete");
+		});
 }
+
+myApp.getGlobalAgeCount = function() {
+	return $.ajax({
+			url: `http://api.population.io:80/1.0/population/${myApp.dateObject.getFullYear()}/World/${myApp.userInfo.ageYears}/`,
+			type: 'GET',
+			dataType: 'JSON',
+		})
+		.done(function() {
+			console.log("success");
+		})
+		.fail(function() {
+			console.log("error");
+		})
+		.always(function() {
+			console.log("complete");
+		});
+}
+
+myApp.chartGlobalAgeCompare = function(numberOfageYearOlds, numberOfHumansMinusAge) {
+	let whereToPutChart = $('#globalPopVsAgeChart')
+	var globalAgeCompareeChart = new Chart(whereToPutChart, {
+		type: 'pie',
+		data: {
+			labels: [`Number of ${myApp.userInfo.ageYears} Year Olds`, 'Remaining Global Population'],
+			datasets: [{
+				label: 'Population',
+				data: [numberOfageYearOlds, numberOfHumansMinusAge],
+				backgroundColor: [
+					'rgba(255, 99, 132, 0.2)',
+					'darkgrey',
+				],
+				borderColor: [
+					'rgba(255,99,132,1)',
+					'darkgrey'
+				],
+				borderWidth: 1
+			}]
+		},
+		options: {
+			title: {
+				display: true,
+				text: 'Number of ' + myApp.userInfo.ageYears + ' Year Olds out of Global Population ',
+				fontSize: 24
+			},
+			legend: {
+				display: false
+			},
+			maintainAspectRatio: false,
+			responsive: true
+		},
+	});
+};
 
 myApp.loadPhaseTwo = function() {
 	$('.otherPerson__Form').fadeOut('slow');
@@ -601,7 +652,6 @@ myApp.loadPhaseTwo = function() {
 	$.when(globalCompareCheck).done((data) => {
 		data.forEach((country) => {
 			if (myApp.finalCountryList[country['country']] === undefined) {
-				console.log('no data on' + country['country'])
 			} else {
 				myApp.finalCountryList[country['country']].populationOfAge = {};
 				myApp.finalCountryList[country['country']].populationOfAge.males = country.males;
@@ -612,10 +662,14 @@ myApp.loadPhaseTwo = function() {
 		myApp.chartGenGlobalAgePopData();
 	});
 	const totalPopulationCheck = myApp.getTotalPopulation();
-	$.when(totalPopulationCheck).done((data) => {
-		console.log(data);
+	const globalAgeCountCheck = myApp.getGlobalAgeCount();
+	$.when(totalPopulationCheck, globalAgeCountCheck).done((totalPopData, agePopData) => {
+		let numberOfageYearOlds = agePopData[0][0].total;
+		let numberOfHumans = totalPopData[0].total_population.population;
+		let numberOfHumansMinusAge = numberOfHumans - numberOfageYearOlds
+		myApp.chartGlobalAgeCompare(numberOfageYearOlds, numberOfHumansMinusAge);
 	});
-	
+
 };
 
 myApp.init = function() {
