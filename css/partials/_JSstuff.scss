@@ -1,0 +1,56 @@
+main {
+	display: none;
+}
+
+.appArea__Flex {
+	display: flex;
+	justify-content: space-around;
+	width: 100%;
+	section {
+		// width: 50%;
+	}
+}
+.loadMore {
+	width: 100%;
+}
+
+.countdown{
+	text-align: center;
+}
+
+.otherPerson__Form fieldset *{
+	display: block;
+	margin: 0 auto;
+	text-align: center;
+}
+
+.jobInfo {
+	display: none;
+}
+
+section.maleVsFemalerPop {
+	display: flex;
+}
+.chart__container{
+	height: 400px;
+	margin: 20px 0;
+	&.maleVsFemalerPop__container {
+		width: calc(50% - 20px);
+	}
+	&.maleVsFemalerPopLeft__container {
+		margin-right: 10px;
+	}
+	&.maleVsFemalerPopRight__container {
+		margin-left: 10px;
+	}
+	&.globalAgeGenPop__container{
+		height: 1000px;
+		.chart {
+			height: 1000px;
+		}
+	}
+	.chart {
+		width: 100%;
+		height: 400px;
+	}
+}

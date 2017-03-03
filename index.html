@@ -6,39 +6,60 @@
 		<title> How do I compare? </title>
 		<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 		<link rel="stylesheet" href="css/styles.css">
+		<link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald" rel="stylesheet">
 	</head>
 	<body>
-		<section class="userInfoInput">
-			<form class="userInfoInput__Form" action="post">
-				<fieldset>
-					<legend>Age Information</legend>
-					<div>
-						<label for="years">Years old</label>
-						<input id="years" class="years"	type="number" maxlength="2" placeholder="Enter your age in years">
+		<div class="centerme userInfoInput">
+			<section class="userInfoInput wrapper">
+				<div class="explaination">
+					<div class="overlay"></div>
+					<div class="text">
+						<h1>Where do you fit in?</h1>
+						<p>By entering some information to the left, we can show you a little bit about other people like you both where you live, and around the world.</p>
+						<p>To do this, we use world population and income data obtrained through the <a href="http://api.population.io">World Population API</a> as well as the <a href="https://developers.teleport.org/api/">Teleport API</a>.</p>
+						<p class="worldAPIstatus">World Population API Status: <i class="worldAPIstatusIcon fa fa fa-spinner fa-pulse fa-3x fa-fw"></i></p>
+						<p class="teleportAPIstatus">Teleport API Status: <i class="teleportAPIstatusIcon fa fa fa-spinner fa-pulse fa-3x fa-fw"></i></p>
+						<p class="goodToGo">Looks like everything is good to go! Click "Show me where I fit in" to proceed.</p>
 					</div>
-					<div>
-						<label for="months">Months since last birthday</label>
-						<input id="months" class="months" type="number" maxlength="2" placeholder="A number between 0 and 11">
-					</div>
-				</fieldset>
-				<fieldset>
-					<legend>Gender Information</legend>
-					<label for="male">Male</label>
-					<input class="gender" id="male" type="radio" name="gender" value="male" required>
-					<label for="female">Female</label>
-					<input class="gender" id="female" type="radio" name="gender" value="female" required>
-				</fieldset>
-				<fieldset>
-					<legend>Country Information</legend>
-					<label for="country">Country</label>
-					<select class="country" name="country" id="country">
-						<option class="loading" value="">loading...</option>
-					</select>
-				</fieldset>
-				<input class="lifeExpect" type="submit" value="How long do i gots?">
-			</form>
-		</section>
-		<main class="appArea">
+				</div>
+				<form class="userInfoInput__Form" action="post">
+					<h2>Tell us a bit about you</h2>
+					<fieldset class="formAge">
+						<legend>Age Information</legend>
+						<div>
+							<label for="years">Years:</label>
+							<input id="years" class="years"	type="number" maxlength="2" placeholder="Ex. 24">
+						</div>
+						<div>
+							<label for="months">Months:</label>
+							<input id="months" class="months" type="number" maxlength="2" placeholder="Ex. 2">
+						</div>
+					</fieldset>
+					<fieldset>
+						<legend>Gender Information</legend>
+						<div class="flexme">
+							<div>
+								<label for="male">Male</label>
+								<input class="gender" id="male" type="radio" name="gender" value="male" required>
+							</div>
+							<div>
+								<label for="female">Female</label>
+								<input class="gender" id="female" type="radio" name="gender" value="female" required>
+							</div>
+						</div>
+					</fieldset>
+					<fieldset>
+						<legend>Country Information</legend>
+						<label class="countryLabel" for="country">Country</label>
+						<select class="country" name="country" id="country">
+							<option class="loading" value="">loading...</option>
+						</select>
+					</fieldset>
+					<input class="lifeExpect" type="submit" value="Show me where I fit in.">
+				</form>
+			</section>
+		</div>
+		<main class="appArea wrapper">
 		<section class="landingSplash">
 			<form class="otherPerson__Form" action="post">
 				<fieldset>
