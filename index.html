@@ -15,11 +15,11 @@
 					<div class="overlay"></div>
 					<div class="text">
 						<h1>Where do you fit in?</h1>
-						<p>By entering some information to the left, we can show you a little bit about other people like you both where you live, and around the world.</p>
-						<p>To do this, we use world population and income data obtrained through the <a href="http://api.population.io">World Population API</a> as well as the <a href="https://developers.teleport.org/api/">Teleport API</a>.</p>
+						<p>By entering just a few pieces of information, we can show you a little bit about how people just like you live around the world.</p>
+						<p>To do this, we use global population and income data obtained through the <a href="http://api.population.io">World Population API</a> as well as the <a href="https://developers.teleport.org/api/">Teleport API</a>.</p>
 						<p class="worldAPIstatus">World Population API Status: <i class="worldAPIstatusIcon fa fa fa-spinner fa-pulse fa-3x fa-fw"></i></p>
 						<p class="teleportAPIstatus">Teleport API Status: <i class="teleportAPIstatusIcon fa fa fa-spinner fa-pulse fa-3x fa-fw"></i></p>
-						<p class="goodToGo">Looks like everything is good to go! Click "Show me where I fit in" to proceed.</p>
+						<p class="goodToGo">Looks like everything is good to go! Fill out the form, and click "Show me where I fit in" to proceed.</p>
 					</div>
 				</div>
 				<form class="userInfoInput__Form" action="post">
@@ -61,10 +61,14 @@
 		</div>
 		<main class="appArea wrapper">
 		<section class="landingSplash">
+			<h2>Select a country to compare with:</h2>
+			<p>With the information we have gotten from you so far, we can pull quite a few statistics about your demographic in your home country.</p>
+			<p>Using the same information you have given, but substituting another country instead of your own, we can make a number of interesting comparisons between what your life is, and what the average life of someone like you in another country might be like.</p>
+			<p>Please select a country you would like to compare with your own, and lets see how life would be different if you lived there.</p>
 			<form class="otherPerson__Form" action="post">
 				<fieldset>
 					<legend>Select a country to compare</legend>
-					<label for="otherPersonCountry">Country</label>
+					<label for="otherPersonCountry countryLabel">Country</label>
 					<select class="country" name="otherPersonCountry" id="otherPersonCountry">
 						<option class="loading" value="">loading...</option>
 					</select>
@@ -72,64 +76,99 @@
 				</fieldset>
 			</form>
 		</section>
-		<div class="appArea__Flex wrapper">
-			<section class="userCountdown countdown">
-				<h2 class="userPersonTitle">Your life left:</h2>
-				<p class="userYears">Years</p>
-				<p class="userDays">Days</p>
-				<p class="userHours">Hours</p>
-				<p class="userMinutes">Minutes</p>
-				<p class="userSeconds">Seconds</p>
+		<section class="content">
+		<section class="countDown">
+			<div class="countdownText">
+				<h2>Life Expectancy</h2>
+				<p>By looking at the life expectancy for the average <span class="genderText">male</span> in <span class="countryText">Canada</span>, and the health statistics for your age group, we have generated a countdown timer.</p>
+				<p>Scroll down to view how much longer you are expected to live, and then take a look at the countdown for your comparison country.</p>
+				<p>Notice that if you lived in <span class="otherPersonCountryText">the USA</span> you would <span class="gainLoss">lose</span> an estimated <span class="yearsText">1</span> year<span class="pluralSyear">(s)</span>, <span class="daysText">2</span> day<span class="pluralSday">(s)</span>, <span class="hoursText">3</span> hour<span class="pluralShour">(s)</span>, and <span class="minutesText">4</span> minute<span class="pluralSminute">(s)</span> <span class="ofFor">of</span> your life.</p>
+			</div>
+			<div class="appArea__Flex wrapper countDownSection">
+				<section class="userCountdown countdown">
+					<h2 class="userPersonTitle">Where you live now:</h2>
+					<p class="userYears">Years</p>
+					<p class="userDays">Days</p>
+					<p class="userHours">Hours</p>
+					<p class="userMinutes">Minutes</p>
+					<p class="userSeconds">Seconds</p>
+				</section>
+				<section class="otherPerson">
+					<div class="OtherPerson__Countdown countdown">
+						<h2 class="otherPersonTitle">Select a Country Below</h2>
+						<p class="otherPersonYears">Years</p>
+						<p class="otherPersonDays">Days</p>
+						<p class="otherPersonHours">Hours</p>
+						<p class="otherPersonMinutes">Minutes</p>
+						<p class="otherPersonSeconds">Seconds</p>
+					</div>
+				</section>
+			</div>
 			</section>
-			<section class="otherPerson">
-				<h2 class="otherPersonTitle">Select a Country Below</h2>
-				<div class="OtherPerson__Countdown countdown">
-					<p class="otherPersonYears">Years</p>
-					<p class="otherPersonDays">Days</p>
-					<p class="otherPersonHours">Hours</p>
-					<p class="otherPersonMinutes">Minutes</p>
-					<p class="otherPersonSeconds">Seconds</p>
+			<section class="jobInfo">
+				<h2>Salary Comparison</h2>
+				<p>Have you ever wondered what people in your profession make in other countries? If you would be better or worse off somewhere else?</p>
+				<p>Below, the average yearly salary for over 50 professions is displayed for both your home country, as well as the country you chose to compare it with.</p>
+				<p>Use the selector just below the graph to compare professions directly. Give it a try!</p>
+				<div class="jobChart__container chart__container">
+					<canvas id="jobChart" class="jobChart chart"></canvas>
+				</div>
+				<form action="post" class="jobInfo__form">
+					<fieldset>
+						<div class="flexme">
+							<div>
+								<legend>Select a career to compare</legend>
+								<label for="jobInfo__select countryLabel">Career</label>
+								<select class="jobInfo__select" name="jobInfo__select" id="jobInfo__select">
+									<option class="jobLoading" value="">loading...</option>
+								</select>
+							</div>
+							<div>
+								<input type="submit" value="Compare Career">
+							</div>
+						</div>
+					</fieldset>
+				</form>
+			</section>
+			<section class="ageGenderPop">
+				<h2>Demographic Size</h2>
+				<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cumque quis repellat molestiae alias. Nisi ipsam, ad culpa harum ut officiis dolorem explicabo, saepe laudantium incidunt unde voluptatem, excepturi fuga velit!</p>
+				<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iusto est, nobis veniam magni fuga amet quam, quo cupiditate iure rem ea consectetur totam tenetur vitae et cumque in facere, itaque!</p>
+				<div class="ageGenderPopChart__container chart__container">
+					<canvas id="ageGenderPopChart" class="ageGenderPopChart chart"></canvas>
 				</div>
 			</section>
-		</div>
-		<button class="loadMore">Click here to find out more</button>
-		<section class="jobInfo">
-			<form action="post" class="jobInfo__form">
-				<fieldset>
-					<legend>Select a career to compare</legend>
-					<label for="jobInfo__select">Country</label>
-					<select class="jobInfo__select" name="jobInfo__select" id="jobInfo__select">
-						<option class="jobLoading" value="">loading...</option>
-					</select>
-					<input type="submit" value="What's the diff?">
-				</fieldset>
-			</form>
-			<div class="jobChart__container chart__container">
-				<canvas id="jobChart" class="jobChart chart"></canvas>
-			</div>
-		</section>
-		<section class="ageGenderPop">
-			<div class="ageGenderPopChart__container chart__container">
-				<canvas id="ageGenderPopChart" class="ageGenderPopChart chart"></canvas>
-			</div>
-		</section>
-		<section class="maleVsFemalerPop">
-			<div class="maleVsFemalerPopLeft__container maleVsFemalerPop__container chart__container">
-				<canvas id="maleVsFemalerPopChartLeft" class="maleVsFemalerPopChart maleVsFemalerPopChartLeft chart"></canvas>
-			</div>
-			<div class="maleVsFemalerPopRight__container maleVsFemalerPop__container chart__container">
-				<canvas id="maleVsFemalerPopChartRight" class="maleVsFemalerPopChart maleVsFemalerPopChartRight chart"></canvas>
-			</div>
-		</section>
-		<section class="globalAgeGenPop">
-			<div class="globalAgeGenPop__container chart__container">
-				<canvas id="globalAgeGenPopChart" class="globalAgeGenPopChart chart"></canvas>
-			</div>
-		</section>
-		<section class="globalPopVsAge">
-			<div class="globalPopVsAge__container chart__container">
-				<canvas id="globalPopVsAgeChart" class="globalPopVsAgeChart chart"></canvas>
-			</div>
+			<section class="maleVsFemalerPop">
+				<h2>lorems</h2>
+				<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Commodi voluptate dolorem, ex atque delectus quasi explicabo pariatur incidunt animi voluptates debitis fuga repellendus cumque veniam maxime natus, deserunt magnam. Alias!</p>
+				<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab vitae, debitis, suscipit consectetur assumenda voluptatum itaque eius fugiat, corrupti aliquid, omnis sint. Magnam sunt dolor illum sit amet recusandae voluptatem.</p>
+				<div class="flexme">
+					<div class="maleVsFemalerPopLeft__container maleVsFemalerPop__container chart__container">
+						<h3><span class="countryText">Canada</span></h3>
+						<canvas id="maleVsFemalerPopChartLeft" class="maleVsFemalerPopChart maleVsFemalerPopChartLeft chart"></canvas>
+					</div>
+					<div class="maleVsFemalerPopRight__container maleVsFemalerPop__container chart__container">
+						<h3><span class="otherPersonCountryText">Canada</span></h3>
+						<canvas id="maleVsFemalerPopChartRight" class="maleVsFemalerPopChart maleVsFemalerPopChartRight chart"></canvas>
+					</div>
+				</div>
+			</section>
+			<section class="globalAgeGenPop">
+				<h2>lorems</h2>
+				<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Commodi voluptate dolorem, ex atque delectus quasi explicabo pariatur incidunt animi voluptates debitis fuga repellendus cumque veniam maxime natus, deserunt magnam. Alias!</p>
+				<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab vitae, debitis, suscipit consectetur assumenda voluptatum itaque eius fugiat, corrupti aliquid, omnis sint. Magnam sunt dolor illum sit amet recusandae voluptatem.</p>
+				<div class="globalAgeGenPop__container chart__container">
+					<canvas id="globalAgeGenPopChart" class="globalAgeGenPopChart chart"></canvas>
+				</div>
+			</section>
+			<section class="globalPopVsAge">
+				<h2>lorems</h2>
+				<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Commodi voluptate dolorem, ex atque delectus quasi explicabo pariatur incidunt animi voluptates debitis fuga repellendus cumque veniam maxime natus, deserunt magnam. Alias!</p>
+				<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab vitae, debitis, suscipit consectetur assumenda voluptatum itaque eius fugiat, corrupti aliquid, omnis sint. Magnam sunt dolor illum sit amet recusandae voluptatem.</p>
+				<div class="globalPopVsAge__container chart__container">
+					<canvas id="globalPopVsAgeChart" class="globalPopVsAgeChart chart"></canvas>
+				</div>
+			</section>
 		</section>
 		</main>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>

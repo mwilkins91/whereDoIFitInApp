@@ -1,0 +1,31 @@
+section.landingSplash {
+	background: white;
+	margin-top: 40px;
+	padding-bottom: 15px;
+	box-shadow: 5px 10px 15px #2C414E;
+	h2{
+		margin: 0;
+		background: $colorTwo;
+		padding: 10px;
+	}
+	h2,p {
+		padding-left: 30px;
+		padding-right: 30px;
+
+	}
+	fieldset{
+		margin-top: 20px;
+		border: none;
+		padding: 5px;
+		legend {
+			text-align: center;
+			font-family: $headerFont;
+			letter-spacing: 1px;
+			font-size: 1.999rem;
+		}
+		label {
+		visibility: hidden;
+		position: absolute;
+	}
+	}
+}

@@ -16,19 +16,79 @@ myApp.events = function() {
 		myApp.otherPersonInfo.country = $('.otherPerson__Form .country').val();
 		$('.otherPersonTitle').text(`If you lived in ${myApp.otherPersonInfo.country}`)
 		myApp.getDateOfDeath('otherPerson');
-	});
-	$('button.loadMore').on('click', function(event) {
-		event.preventDefault();
-		myApp.loadPhaseTwo();
+		$('.otherPersonCountryText').text(myApp.otherPersonInfo.country);
+		$.when(myApp.userInfo.dateOfDeathCheck).done(() => {
+			myApp.ageDiff = myApp.getAgeDiff();
+			myApp.updateAgeParagraph();
+			myApp.loadPhaseTwo();
+		});
 	});
 	$('.jobInfo__form').on('submit', function(event) {
 		event.preventDefault();
 		let selectedJob = $('.jobInfo__select').val().replace(/_/gi, ' ');
-		// console.log(selectedJob)
 		myApp.chartJobs(myApp.jobSalariesList[selectedJob]);
-
 	});
 };
+
+myApp.updateAgeParagraph = function(){
+			$('.gainLoss').text(myApp.ageDiff.gainLoss);
+			$('.yearsText').text(myApp.ageDiff.years);
+			$('.daysText').text(myApp.ageDiff.days);
+			$('.hoursText').text(myApp.ageDiff.hours);
+			$('.minutesText').text(myApp.ageDiff.minutes);
+			if (myApp.ageDiff.years > 1 || myApp.ageDiff.years === 0) {
+				$('.pluralSyear').text('s');
+			} else {
+				$('.pluralSyear').text('');
+			}
+			if (myApp.ageDiff.days > 1 || myApp.ageDiff.years === 0) {
+				$('.pluralSday').text('s');
+			} else {
+				$('.pluralSday').text('');
+			}
+			if (myApp.ageDiff.hours > 1 || myApp.ageDiff.years === 0) {
+				$('.pluralShour').text('s');
+			} else {
+				$('.pluralShour').text('');
+			}
+			if (myApp.ageDiff.minutes > 1 || myApp.ageDiff.years === 0) {
+				$('.pluralSminute').text('s');
+			} else {
+				$('.pluralSminute').text('');
+			}
+			$('.ofFor').text(myApp.ageDiff.ofFor);
+}
+
+myApp.getAgeDiff = function() {
+	let userDeath = myApp.userInfo.dateOfDeath;
+	let otherDeath = myApp.otherPersonInfo.dateOfDeath;
+	let gainLoss;
+	let difference;
+	let ofFor;
+	if (userDeath > otherDeath) {
+		gainLoss = 'lose';
+		difference = userDeath - otherDeath;
+		ofFor = 'of';
+	} else if (userDeath < otherDeath) {
+		gainLoss = 'add';
+		difference = otherDeath - userDeath;
+		ofFor = 'to';
+	}
+	var seconds = Math.floor((difference / 1000) % 60);
+	var minutes = Math.floor((difference / 1000 / 60) % 60);
+	var hours = Math.floor((difference / (1000 * 60 * 60)) % 24);
+	var days = Math.floor(difference / (1000 * 60 * 60 * 24)) % 365;
+	var years = Math.floor(difference / (1000 * 60 * 60 * 24 * 365));
+	return {
+		seconds: seconds,
+		minutes: minutes,
+		hours: hours,
+		days: days,
+		years: years,
+		gainLoss: gainLoss,
+		ofFor: ofFor
+	}
+}
 
 myApp.startCountdown = function(dateOfDeath, who) {
 	if (who === "user") {
@@ -162,6 +222,10 @@ myApp.getUserInfo = function() {
 	myApp.otherPersonInfo = {};
 	myApp.otherPersonInfo.timerEngaged = false;
 
+	$('.genderText').text(userInfo.gender);
+	$('.countryText').text(userInfo.country);
+
+
 	return userInfo;
 };
 
@@ -184,7 +248,6 @@ myApp.getDateOfDeath = function(who) { //need to get even when for other person 
 			} else {
 				myApp.otherPersonInfo.dateOfDeath = dateOfDeath;
 				myApp.otherPersonInfo.timerEngaged = true;
-				// myApp.startCountdown(myApp.otherPersonInfo.dateOfDeath, 'otherPerson');
 			}
 		})
 		.fail(function() {
@@ -303,28 +366,48 @@ myApp.chartJobs = function(job) {
 				label: 'Average Salary',
 				data: dataArray,
 				backgroundColor: [
-					'rgba(255, 99, 132, 0.2)',
-					'rgba(54, 162, 235, 0.2)'
+					'#FFBB00',
+					'#A4A4A3'
 				],
 				borderColor: [
-					'rgba(255,99,132,1)',
-					'rgba(54, 162, 235, 1)',
+					'#FFBB00',
+					'#A4A4A3',
 				],
 				borderWidth: 2
 			}]
 		},
 		options: {
+			layout: {
+				padding: {
+					left: 10,
+					top: 20,
+					bottom: 20
+				}
+			},
 			scales: {
 				yAxes: [{
+					gridLines: {
+						color: "#525253"
+					},
 					ticks: {
 						beginAtZero: true
 					}
-				}]
+				}],
+				xAxes: [{
+					gridLines: {
+						display: false,
+					},
+					ticks: {
+						fontColor: "#fff", // this here
+					},
+				}],
 			},
 			title: {
 				display: true,
 				text: jobTitle + " Salary",
-				fontSize: 24
+				fontSize: 24,
+				fontFamily: "'Oswald', sans-serif",
+				fontColor: 'white'
 			},
 			legend: {
 				display: false
@@ -368,28 +451,45 @@ myApp.chartAgeGenderPop = function(leftGenderPop, rightGenderPop) {
 				label: 'Population of ' + myApp.userInfo.ageYears + 'year old ' + myApp.userInfo.gender + 's',
 				data: [leftGenderPop, rightGenderPop],
 				backgroundColor: [
-					'rgba(255, 99, 132, 0.2)',
-					'rgba(54, 162, 235, 0.2)'
+					'#FFBB00',
+					'#A4A4A3'
 				],
 				borderColor: [
-					'rgba(255,99,132,1)',
-					'rgba(54, 162, 235, 1)',
+					'#FFBB00',
+					'#A4A4A3',
 				],
 				borderWidth: 2
 			}]
 		},
 		options: {
+			layout: {
+				padding: {
+					left: 10,
+					top: 20,
+					bottom: 20
+				}
+			},
 			scales: {
 				yAxes: [{
 					ticks: {
 						beginAtZero: true
 					}
-				}]
+				}],
+				xAxes: [{
+					gridLines: {
+						display: false,
+					},
+					ticks: {
+						fontColor: "#fff", // this here
+					},
+				}],
 			},
 			title: {
 				display: true,
 				text: 'Population of ' + myApp.userInfo.ageYears + ' Year Old ' + capitalizedGender + 's',
-				fontSize: 24
+				fontSize: 24,
+				fontFamily: "'Oswald', sans-serif",
+				fontColor: 'white'
 			},
 			legend: {
 				display: false
@@ -417,12 +517,12 @@ myApp.chartGenBreakdown = function(allLeftGenData, leftOrRight) {
 				label: 'Population of ' + myApp.userInfo.ageYears + 'year old ' + myApp.userInfo.gender + 's',
 				data: [allLeftGenData['males'], allLeftGenData['females']],
 				backgroundColor: [
-					'rgba(54, 162, 235, 0.2)',
-					'rgba(255, 99, 132, 0.2)',
+					'#FFBB00',
+					'#A4A4A3'
 				],
 				borderColor: [
-					'rgba(54, 162, 235, 1)',
-					'rgba(255,99,132,1)',
+					'#FFBB00',
+					'#A4A4A3',
 				],
 				borderWidth: 2
 			}]
@@ -431,7 +531,9 @@ myApp.chartGenBreakdown = function(allLeftGenData, leftOrRight) {
 			title: {
 				display: true,
 				text: 'Male and Female Population Breakdown',
-				fontSize: 24
+				fontSize: 24,
+				fontFamily: "'Oswald', sans-serif",
+				fontColor: 'white'
 			},
 			legend: {
 				display: false
@@ -515,7 +617,7 @@ myApp.chartGenGlobalAgePopData = function() {
 	} else {
 		genderData = myApp.globalAgePopArrays.females.numbers
 	}
-	let colourArray = myApp.makeColourArray(genderData, 'darkgrey');
+	let colourArray = myApp.makeColourArray(genderData, 'rgb(109,109,109)');
 	let borderColourArray = myApp.makeColourArray(genderData, 'black');
 	var globalGenAgeChart = new Chart(whereToPutChart, {
 		type: 'pie',
@@ -525,13 +627,13 @@ myApp.chartGenGlobalAgePopData = function() {
 				label: 'Population of ' + myApp.userInfo.ageYears + ' Year Old ' + myApp.userInfo.gender + 's.',
 				data: genderData,
 				backgroundColor: [
-					'rgba(255, 99, 132, 0.2)',
-					'rgba(54, 162, 235, 0.2)',
+					'#FFBB00',
+					'#A4A4A3',
 					...colourArray
 				],
 				borderColor: [
-					'rgba(255,99,132,1)',
-					'rgba(54, 162, 235, 0.2)',
+					'#FFBB00',
+					'#A4A4A3',
 					...colourArray
 				],
 				borderWidth: 1
@@ -541,7 +643,9 @@ myApp.chartGenGlobalAgePopData = function() {
 			title: {
 				display: true,
 				text: 'Global population of ' + myApp.userInfo.ageYears + ' Year Old ' + myApp.userInfo.gender + 's.',
-				fontSize: 24
+				fontSize: 24,
+				fontFamily: "'Oswald', sans-serif",
+				fontColor: 'white'
 			},
 			legend: {
 				display: false
@@ -596,12 +700,12 @@ myApp.chartGlobalAgeCompare = function(numberOfageYearOlds, numberOfHumansMinusA
 				label: 'Population',
 				data: [numberOfageYearOlds, numberOfHumansMinusAge],
 				backgroundColor: [
-					'rgba(255, 99, 132, 0.2)',
-					'darkgrey',
+					'#FFBB00',
+					'#A4A4A3',
 				],
 				borderColor: [
-					'rgba(255,99,132,1)',
-					'darkgrey'
+					'#FFBB00',
+					'#A4A4A3',
 				],
 				borderWidth: 1
 			}]
@@ -610,7 +714,9 @@ myApp.chartGlobalAgeCompare = function(numberOfageYearOlds, numberOfHumansMinusA
 			title: {
 				display: true,
 				text: 'Number of ' + myApp.userInfo.ageYears + ' Year Olds out of Global Population ',
-				fontSize: 24
+				fontSize: 24,
+				fontFamily: "'Oswald', sans-serif",
+				fontColor: 'white'
 			},
 			legend: {
 				display: false
@@ -628,7 +734,7 @@ myApp.loadPhaseTwo = function() {
 	$.when(countryLeftCheck, countryRightCheck).done((leftData, rightData) => {
 		myApp.createMasterSalariesList(leftData, rightData);
 		myApp.chartJobs(); //starts chart with overall
-		$('.jobInfo').fadeIn('slow');
+		$('section.content').fadeIn('slow');
 	});
 	const leftCountryYourAgePopCheck = myApp.getYourAgePop(myApp.userInfo.country, myApp.userInfo.ageYears)
 	const rightCountryYourAgePopCheck = myApp.getYourAgePop(myApp.otherPersonInfo.country, myApp.userInfo.ageYears)
@@ -651,8 +757,7 @@ myApp.loadPhaseTwo = function() {
 	const globalCompareCheck = myApp.getGlobalAgePop();
 	$.when(globalCompareCheck).done((data) => {
 		data.forEach((country) => {
-			if (myApp.finalCountryList[country['country']] === undefined) {
-			} else {
+			if (myApp.finalCountryList[country['country']] === undefined) {} else {
 				myApp.finalCountryList[country['country']].populationOfAge = {};
 				myApp.finalCountryList[country['country']].populationOfAge.males = country.males;
 				myApp.finalCountryList[country['country']].populationOfAge.females = country.females;

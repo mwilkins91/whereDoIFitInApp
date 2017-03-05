@@ -1,0 +1,130 @@
+.countDownSection .countdown{
+	@extend section.landingSplash;
+	width: 400px;
+}
+
+.appArea__Flex {
+	display: flex;
+	justify-content: space-around;
+	width: 100%;
+	@media all and (max-width: 820px){
+		flex-direction: column;
+		align-items: center;
+	}
+}
+
+.countdownText {
+	@extend .ageGenderPop;
+}
+
+.jobInfo {
+	@extend section.landingSplash;
+	p,div {
+		padding: 0 40px;
+	}
+	label {
+		visibility: hidden;
+		position: absolute;
+	}
+	legend {
+		align-self: center;
+	}
+	.flexme{
+		display: flex;
+		align-items: center;
+		@media all and (max-width: 500px){
+			flex-direction: column;
+		}
+		div {
+			width: 50%;
+			@media all and (max-width: 820px){
+				padding: 0;
+			}
+			@media all and (max-width: 500px){
+			width: 100%;
+		}
+		}
+		div:first-child {
+			legend, select{
+				width: 100%;
+				text-align: center;
+			}
+		}
+	}
+}
+
+.ageGenderPop {
+	@extend section.landingSplash;
+	p,div {
+		padding: 0 40px;
+	}
+}
+
+.maleVsFemalerPop {
+	padding-bottom: 130px;
+	h3 {
+		text-align: center;
+	}
+		@extend section.landingSplash;
+		.maleVsFemalerPop__container {
+			width: calc(50% - 20px);
+		}
+		.maleVsFemalerPopLeft__container {
+			margin-right: 10px;
+		@media all and (max-width: 840px){
+			margin: 0;
+			margin-bottom:100px; 
+
+		}
+
+		}
+		.maleVsFemalerPopRight__container {
+			margin-left: 10px;
+				@media all and (max-width: 840px){
+					margin: 0;
+
+		}
+		}
+	p,div {
+		padding: 0 40px;
+	}
+	div {
+		@media all and (max-width: 1040px){
+			padding: 0;
+		}
+	}
+	@media all and (max-width: 840px){
+	.maleVsFemalerPop__container.chart__container {
+		width: 100%;
+	}
+	}
+	.flexme{
+		display: flex;
+		@media all and (max-width: 840px){
+			flex-direction: column;
+			align-items: center;
+		}
+	}
+}
+
+
+
+.globalAgeGenPop {
+		@extend section.landingSplash;
+	p,div {
+		padding: 0 40px;
+	}
+	div {
+		@media all and (max-width: 840px){
+			padding: 0;
+		}
+	}
+}
+
+.globalPopVsAge {
+		@extend section.landingSplash;
+	p,div {
+		padding: 0 40px;
+	}
+}
+

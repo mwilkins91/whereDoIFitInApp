@@ -1,4 +1,7 @@
-
+.countryLabel {
+		visibility: hidden;
+		position: absolute;
+	}
 
 body {
 	background: #A7CACA;
@@ -26,6 +29,11 @@ section.userInfoInput {
 	transform: translate( -50%, -50%);
 	display: flex;
 	flex-direction: row-reverse;
+	@media all and (max-width: 755px){
+		flex-direction: column;
+		top: 0;
+		transform: translateX(-50%);
+	}
 	.explaination {
 		position: relative;
 		padding: 40px 40px 30px;
@@ -33,6 +41,17 @@ section.userInfoInput {
 		background-repeat: no-repeat;
 		background-size: 100%;
 		flex-grow: 2;
+		@media all and (max-width: 976px){
+		background-image: url(../assets/bigHero.jpg);
+		background-size: 200%;
+		background-position: 40% 30%;
+		}
+		@media all and (max-width: 755px){
+			background-size: cover;
+			h1 {
+				line-height: 4.4rem;
+			}
+		}
 		i {
 			font-size: 25px;
 		}
@@ -72,14 +91,9 @@ section.userInfoInput {
 		.formAge div{
 			display: flex;
 			justify-content: space-between;
-		}
-		input {
-			border: none;
-		}
-		input[type=number]{
-			border-bottom: 2px solid lightgrey;
-			margin: 0 15px;
-			text-align: center;
+			@media all and (max-width: 755px){
+				justify-content: center;
+			}
 		}
 		h2 {
 			font-size: 2.827rem;
@@ -102,11 +116,13 @@ section.userInfoInput {
 		.flexme {
 			display: flex;
 			justify-content: space-around;
+			@media all and (max-width: 755px){
+				justify-content: center;
+			}
 		}
 	}
 	header {
 		background: $colorOne;
-		// height: 25px;
 		width: 100%;
 		position: absolute;
 		top: 0;
@@ -117,25 +133,39 @@ section.userInfoInput {
 			font-size: 3.998rem;
 		}
 	}
-	.countryLabel {
-		visibility: hidden;
-		position: absolute;
-	}
+	
 	.country, option {
 		width: 100%;
 		text-align: center;
+		@media all and (max-width: 755px){
+			width: 50%;
+			margin: 0 auto;
+			display: block;
+		}
 	}
-	input[type=submit] {
+}
+
+		input {
+			border: none;
+		}
+		input[type=number]{
+			border-bottom: 2px solid lightgrey;
+			margin: 0 15px;
+			text-align: center;
+		}
+input[type=submit] {
+		position: relative;
 		text-align: center;
 		display: block;
 		margin: 0 auto;
 		padding: 30px;
-		// width: 100%;
 		background: none;
 		border: 4px solid $colorTwo;
 		margin-top: 20px;
 		font-family: $headerFont;
 		font-size: 1.999rem;
+		transition: background 0.5s ;
 	}
-}
-
+	input[type=submit]:hover {
+		background: $colorTwo;
+	}

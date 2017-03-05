@@ -1,11 +1,14 @@
 @import "partials/variables";
 @import "partials/normalize";
-
+	canvas {
+		background: $softBlack;
+	}
 .wrapper {
 	max-width: 1200px;
 	margin: 0 auto;
 }
 
-@import "partials/_JSstuff.scss";
+@import "partials/JSstuff";
 @import "partials/firstForm";
-
+@import "partials/landingSplash";
+@import "partials/contentSections";
