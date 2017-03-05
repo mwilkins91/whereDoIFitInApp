@@ -8,7 +8,38 @@
 	margin: 0 auto;
 }
 
+.goodToGo {
+	opacity: 0;
+	transition: opacity 0.3s;
+}
+
+footer {
+	background: #2C414E;
+	display: none;
+	margin-top: 30px;
+	div {
+		display: flex;
+		justify-content: center;
+		ul {
+			display: flex;
+			list-style: none;
+			padding: 0;
+			width: 50%;
+			justify-content: space-around;
+			a,i {
+				color: white;
+				font-size: 3rem;
+				transition: all 1s;
+				padding: 10px;
+				&:hover {
+					color: $colorTwo;
+				}
+			}
+		}
+	}
+}
 @import "partials/JSstuff";
 @import "partials/firstForm";
 @import "partials/landingSplash";
 @import "partials/contentSections";
+@import "partials/error"

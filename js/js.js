@@ -30,33 +30,33 @@ myApp.events = function() {
 	});
 };
 
-myApp.updateAgeParagraph = function(){
-			$('.gainLoss').text(myApp.ageDiff.gainLoss);
-			$('.yearsText').text(myApp.ageDiff.years);
-			$('.daysText').text(myApp.ageDiff.days);
-			$('.hoursText').text(myApp.ageDiff.hours);
-			$('.minutesText').text(myApp.ageDiff.minutes);
-			if (myApp.ageDiff.years > 1 || myApp.ageDiff.years === 0) {
-				$('.pluralSyear').text('s');
-			} else {
-				$('.pluralSyear').text('');
-			}
-			if (myApp.ageDiff.days > 1 || myApp.ageDiff.years === 0) {
-				$('.pluralSday').text('s');
-			} else {
-				$('.pluralSday').text('');
-			}
-			if (myApp.ageDiff.hours > 1 || myApp.ageDiff.years === 0) {
-				$('.pluralShour').text('s');
-			} else {
-				$('.pluralShour').text('');
-			}
-			if (myApp.ageDiff.minutes > 1 || myApp.ageDiff.years === 0) {
-				$('.pluralSminute').text('s');
-			} else {
-				$('.pluralSminute').text('');
-			}
-			$('.ofFor').text(myApp.ageDiff.ofFor);
+myApp.updateAgeParagraph = function() {
+	$('.gainLoss').text(myApp.ageDiff.gainLoss);
+	$('.yearsText').text(myApp.ageDiff.years);
+	$('.daysText').text(myApp.ageDiff.days);
+	$('.hoursText').text(myApp.ageDiff.hours);
+	$('.minutesText').text(myApp.ageDiff.minutes);
+	if (myApp.ageDiff.years > 1 || myApp.ageDiff.years === 0) {
+		$('.pluralSyear').text('s');
+	} else {
+		$('.pluralSyear').text('');
+	}
+	if (myApp.ageDiff.days > 1 || myApp.ageDiff.years === 0) {
+		$('.pluralSday').text('s');
+	} else {
+		$('.pluralSday').text('');
+	}
+	if (myApp.ageDiff.hours > 1 || myApp.ageDiff.years === 0) {
+		$('.pluralShour').text('s');
+	} else {
+		$('.pluralShour').text('');
+	}
+	if (myApp.ageDiff.minutes > 1 || myApp.ageDiff.years === 0) {
+		$('.pluralSminute').text('s');
+	} else {
+		$('.pluralSminute').text('');
+	}
+	$('.ofFor').text(myApp.ageDiff.ofFor);
 }
 
 myApp.getAgeDiff = function() {
@@ -139,7 +139,15 @@ myApp.getCountries = function() {
 		})
 		.done(function(countriesArray) {
 			myApp.parseCountries(countriesArray['countries']);
-			// console.log(countriesArray['countries'])
+			$('.worldAPIstatusIcon').removeClass('fa-spinner');
+			$('.worldAPIstatusIcon').removeClass('fa-pulse');
+			$('.worldAPIstatusIcon').removeClass('fa-3x');
+			$('.worldAPIstatusIcon').removeClass('fa-fw');
+			$('.worldAPIstatusIcon').addClass('fa-check-circle')
+
+		})
+		.fail(function() {
+			$('.errorMessageOverlay').fadeIn('fast');
 		});
 
 
@@ -152,10 +160,15 @@ myApp.getCountries = function() {
 		})
 		.done(function(teleportCountries) {
 			myApp.parseTeleportCountries(teleportCountries._links["country:items"]);
-
+			$('.teleportAPIstatusIcon').removeClass('fa-spinner');
+			$('.teleportAPIstatusIcon').removeClass('fa-pulse');
+			$('.teleportAPIstatusIcon').removeClass('fa-3x');
+			$('.teleportAPIstatusIcon').removeClass('fa-fw');
+			$('.teleportAPIstatusIcon').addClass('fa-check-circle')
 		})
 		.fail(function() {
 			console.log("error");
+			$('.errorMessageOverlay').fadeIn('fast');
 		})
 		.always(function() {
 			console.log("complete");
@@ -224,6 +237,8 @@ myApp.getUserInfo = function() {
 
 	$('.genderText').text(userInfo.gender);
 	$('.countryText').text(userInfo.country);
+	$('.ageText').text(userInfo.ageYears);
+
 
 
 	return userInfo;
@@ -252,6 +267,7 @@ myApp.getDateOfDeath = function(who) { //need to get even when for other person 
 		})
 		.fail(function() {
 			console.log("error");
+			$('.errorMessageOverlay').fadeIn('fast');
 		})
 		.always(function() {
 			console.log("complete");
@@ -287,6 +303,7 @@ myApp.getSalaryInfo = function(countryHREF) {
 		})
 		.fail(function() {
 			console.log("error");
+			$('.errorMessageOverlay').fadeIn('fast');
 		})
 		.always(function() {
 			console.log("complete");
@@ -308,7 +325,13 @@ myApp.createMasterSalariesList = function(leftData, rightData) {
 		salariesList[jobTitle][leftCountry] = {};
 		salariesList[jobTitle][rightCountry] = {};
 		salariesList[jobTitle][leftCountry] = jobSalaries;
-		let jobSalariesRight = rightSalaries[job]['salary_percentiles'];
+		let jobSalariesRight;
+		if (rightSalaries[job] === undefined) {
+			jobSalariesRight = Object.assign({},leftSalaries[job]['salary_percentiles']);
+			jobSalariesRight.percentile_50 = 0;
+		} else {
+			jobSalariesRight = rightSalaries[job]['salary_percentiles'];
+		}
 		salariesList[jobTitle][rightCountry] = jobSalariesRight;
 	}
 	myApp.jobSalariesList = salariesList;
@@ -429,6 +452,7 @@ myApp.getYourAgePop = function(country, age) {
 		})
 		.fail(function() {
 			console.log("error");
+			$('.errorMessageOverlay').fadeIn('fast');
 		})
 		.always(function() {
 			console.log("complete");
@@ -471,6 +495,9 @@ myApp.chartAgeGenderPop = function(leftGenderPop, rightGenderPop) {
 			},
 			scales: {
 				yAxes: [{
+					gridLines: {
+						color: "#525253"
+					},
 					ticks: {
 						beginAtZero: true
 					}
@@ -502,6 +529,14 @@ myApp.chartAgeGenderPop = function(leftGenderPop, rightGenderPop) {
 
 myApp.chartGenBreakdown = function(allLeftGenData, leftOrRight) {
 	let whereToPutChart;
+	let maleColor = '#A4A4A3';
+	let femaleColor = '#A4A4A3';
+	if (myApp.userInfo.gender == 'male') {
+		maleColor = '#FFBB00';
+	}
+	if (myApp.userInfo.gender == 'female') {
+		femaleColor = '#FFBB00';
+	}
 	if (leftOrRight == 'left') {
 		whereToPutChart = $('#maleVsFemalerPopChartLeft');
 	} else {
@@ -517,12 +552,12 @@ myApp.chartGenBreakdown = function(allLeftGenData, leftOrRight) {
 				label: 'Population of ' + myApp.userInfo.ageYears + 'year old ' + myApp.userInfo.gender + 's',
 				data: [allLeftGenData['males'], allLeftGenData['females']],
 				backgroundColor: [
-					'#FFBB00',
-					'#A4A4A3'
+					maleColor,
+					femaleColor
 				],
 				borderColor: [
-					'#FFBB00',
-					'#A4A4A3',
+					maleColor,
+					femaleColor,
 				],
 				borderWidth: 2
 			}]
@@ -555,6 +590,7 @@ myApp.getGlobalAgePop = function() {
 		})
 		.fail(function() {
 			console.log("error");
+			$('.errorMessageOverlay').fadeIn('fast');
 		})
 		.always(function() {
 			console.log("complete");
@@ -577,7 +613,7 @@ myApp.createGlobalAgePopDataArrays = function() {
 		let femaleDataArray = myApp.globalAgePopArrays.females.numbers;
 		let maleLabelArray = myApp.globalAgePopArrays.males.labels;
 		let femaleLabelArray = myApp.globalAgePopArrays.females.labels;
-		if (!(countryLabel === myApp.userInfo.country && countryLabel === myApp.otherPersonInfo.country)) {
+		if (!(countryLabel === myApp.userInfo.country || countryLabel === myApp.otherPersonInfo.country)) {
 			femaleLabelArray.push(countryLabel);
 			maleLabelArray.push(countryLabel);
 			maleDataArray.push(countryMalePop);
@@ -667,6 +703,7 @@ myApp.getTotalPopulation = function() {
 		})
 		.fail(function() {
 			console.log("error");
+			$('.errorMessageOverlay').fadeIn('fast');
 		})
 		.always(function() {
 			console.log("complete");
@@ -684,6 +721,7 @@ myApp.getGlobalAgeCount = function() {
 		})
 		.fail(function() {
 			console.log("error");
+			$('.errorMessageOverlay').fadeIn('fast');
 		})
 		.always(function() {
 			console.log("complete");
@@ -753,6 +791,7 @@ myApp.loadPhaseTwo = function() {
 		let allRightGenData = rightData[0][0];
 		myApp.chartGenBreakdown(allLeftGenData, 'left');
 		myApp.chartGenBreakdown(allRightGenData, 'right');
+		$('footer').fadeIn('slow');
 	})
 	const globalCompareCheck = myApp.getGlobalAgePop();
 	$.when(globalCompareCheck).done((data) => {
@@ -782,6 +821,7 @@ myApp.init = function() {
 	myApp.todayDate = myApp.getDate();
 	$.when(myApp.teleportCountriesCheck, myApp.getCountriesCheck)
 		.done(function() {
+			$('.goodToGo').css('opacity', '1');
 			myApp.createMasterCountryList();
 		});
 	myApp.events();

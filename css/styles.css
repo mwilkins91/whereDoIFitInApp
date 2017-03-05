@@ -176,6 +176,49 @@ canvas {
   margin: 0 auto;
 }
 
+.goodToGo {
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+footer {
+  background: #2C414E;
+  display: none;
+  margin-top: 30px;
+}
+
+footer div {
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-justify-content: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+
+footer div ul {
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  list-style: none;
+  padding: 0;
+  width: 50%;
+  -webkit-justify-content: space-around;
+      -ms-flex-pack: distribute;
+          justify-content: space-around;
+}
+
+footer div ul a, footer div ul i {
+  color: white;
+  font-size: 3rem;
+  transition: all 1s;
+  padding: 10px;
+}
+
+footer div ul a:hover, footer div ul i:hover {
+  color: #FFBB00;
+}
+
 section.content {
   display: none;
 }
@@ -453,38 +496,38 @@ input[type=submit]:hover {
   background: #FFBB00;
 }
 
-section.landingSplash, .countDownSection .countdown, .jobInfo, .ageGenderPop, .countdownText, .maleVsFemalerPop, .globalAgeGenPop, .globalPopVsAge {
+section.landingSplash, .countDownSection .countdown, .jobInfo, .ageGenderPop, .countdownText, .maleVsFemalerPop, .globalAgeGenPop, .globalPopVsAge, .errorMessage {
   background: white;
   margin-top: 40px;
   padding-bottom: 15px;
   box-shadow: 5px 10px 15px #2C414E;
 }
 
-section.landingSplash h2, .countDownSection .countdown h2, .jobInfo h2, .ageGenderPop h2, .countdownText h2, .maleVsFemalerPop h2, .globalAgeGenPop h2, .globalPopVsAge h2 {
+section.landingSplash h2, .countDownSection .countdown h2, .jobInfo h2, .ageGenderPop h2, .countdownText h2, .maleVsFemalerPop h2, .globalAgeGenPop h2, .globalPopVsAge h2, .errorMessage h2 {
   margin: 0;
   background: #FFBB00;
   padding: 10px;
 }
 
-section.landingSplash h2, .countDownSection .countdown h2, .jobInfo h2, .ageGenderPop h2, .countdownText h2, .maleVsFemalerPop h2, .globalAgeGenPop h2, .globalPopVsAge h2, section.landingSplash p, .countDownSection .countdown p, .jobInfo p, .ageGenderPop p, .countdownText p, .maleVsFemalerPop p, .globalAgeGenPop p, .globalPopVsAge p {
+section.landingSplash h2, .countDownSection .countdown h2, .jobInfo h2, .ageGenderPop h2, .countdownText h2, .maleVsFemalerPop h2, .globalAgeGenPop h2, .globalPopVsAge h2, .errorMessage h2, section.landingSplash p, .countDownSection .countdown p, .jobInfo p, .ageGenderPop p, .countdownText p, .maleVsFemalerPop p, .globalAgeGenPop p, .globalPopVsAge p, .errorMessage p {
   padding-left: 30px;
   padding-right: 30px;
 }
 
-section.landingSplash fieldset, .countDownSection .countdown fieldset, .jobInfo fieldset, .ageGenderPop fieldset, .countdownText fieldset, .maleVsFemalerPop fieldset, .globalAgeGenPop fieldset, .globalPopVsAge fieldset {
+section.landingSplash fieldset, .countDownSection .countdown fieldset, .jobInfo fieldset, .ageGenderPop fieldset, .countdownText fieldset, .maleVsFemalerPop fieldset, .globalAgeGenPop fieldset, .globalPopVsAge fieldset, .errorMessage fieldset {
   margin-top: 20px;
   border: none;
   padding: 5px;
 }
 
-section.landingSplash fieldset legend, .countDownSection .countdown fieldset legend, .jobInfo fieldset legend, .ageGenderPop fieldset legend, .countdownText fieldset legend, .maleVsFemalerPop fieldset legend, .globalAgeGenPop fieldset legend, .globalPopVsAge fieldset legend {
+section.landingSplash fieldset legend, .countDownSection .countdown fieldset legend, .jobInfo fieldset legend, .ageGenderPop fieldset legend, .countdownText fieldset legend, .maleVsFemalerPop fieldset legend, .globalAgeGenPop fieldset legend, .globalPopVsAge fieldset legend, .errorMessage fieldset legend {
   text-align: center;
   font-family: "Oswald", sans-serif;
   letter-spacing: 1px;
   font-size: 1.999rem;
 }
 
-section.landingSplash fieldset label, .countDownSection .countdown fieldset label, .jobInfo fieldset label, .ageGenderPop fieldset label, .countdownText fieldset label, .maleVsFemalerPop fieldset label, .globalAgeGenPop fieldset label, .globalPopVsAge fieldset label {
+section.landingSplash fieldset label, .countDownSection .countdown fieldset label, .jobInfo fieldset label, .ageGenderPop fieldset label, .countdownText fieldset label, .maleVsFemalerPop fieldset label, .globalAgeGenPop fieldset label, .globalPopVsAge fieldset label, .errorMessage fieldset label {
   visibility: hidden;
   position: absolute;
 }
@@ -649,4 +692,44 @@ section.landingSplash fieldset label, .countDownSection .countdown fieldset labe
 
 .globalPopVsAge p, .globalPopVsAge div {
   padding: 0 40px;
+}
+
+.errorMessageOverlay {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 99;
+  background: rgba(0, 0, 0, 0.8);
+  display: none;
+}
+
+.errorMessage {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+      -ms-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
+  width: 90%;
+}
+
+.errorMessage a {
+  display: block;
+  width: 50%;
+  margin: 10px auto;
+  text-align: center;
+  padding: 30px;
+  background: none;
+  border: 4px solid #FFBB00;
+  font-family: "Oswald", sans-serif;
+  font-size: 1.999rem;
+  transition: background 0.5s;
+  color: black;
+  text-decoration: none;
+}
+
+.errorMessage a:hover {
+  background: #FFBB00;
 }
