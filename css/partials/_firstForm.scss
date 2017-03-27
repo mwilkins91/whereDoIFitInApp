@@ -1,7 +1,7 @@
 .countryLabel {
-		visibility: hidden;
-		position: absolute;
-	}
+	visibility: hidden;
+	position: absolute;
+}
 
 body {
 	background: #A7CACA;
@@ -9,7 +9,10 @@ body {
 	font-family: 'Open Sans', sans-serif;
 }
 
-h1, h2, h3, h4 {
+h1,
+h2,
+h3,
+h4 {
 	font-family: 'Oswald', sans-serif;
 }
 
@@ -19,6 +22,7 @@ h1, h2, h3, h4 {
 	position: relative;
 	background: auto;
 }
+
 section.userInfoInput {
 	width: 100%;
 	background: white;
@@ -29,7 +33,7 @@ section.userInfoInput {
 	transform: translate( -50%, -50%);
 	display: flex;
 	flex-direction: row-reverse;
-	@media all and (max-width: 755px){
+	@media all and (max-width: 755px) {
 		flex-direction: column;
 		top: 0;
 		transform: translateX(-50%);
@@ -41,12 +45,12 @@ section.userInfoInput {
 		background-repeat: no-repeat;
 		background-size: 100%;
 		flex-grow: 2;
-		@media all and (max-width: 976px){
-		background-image: url(../assets/bigHero.jpg);
-		background-size: 200%;
-		background-position: 40% 30%;
+		@media all and (max-width: 976px) {
+			background-image: url(../assets/bigHero.jpg);
+			background-size: 200%;
+			background-position: 40% 30%;
 		}
-		@media all and (max-width: 755px){
+		@media all and (max-width: 755px) {
 			background-size: cover;
 			h1 {
 				line-height: 4.4rem;
@@ -63,7 +67,7 @@ section.userInfoInput {
 		top: 0;
 		bottom: 0;
 		left: 0;
-		background: rgba(0,0,0,0.6);
+		background: rgba(0, 0, 0, 0.6);
 	}
 	.text {
 		position: relative;
@@ -85,24 +89,37 @@ section.userInfoInput {
 		}
 	}
 	form {
+		position: relative;
 		flex-grow: 1;
 		align-self: top;
 		font-size: 1.414rem;
-		.formAge div{
+		@media all and (min-width: 845px) {
+			padding: 0 40px;
+		}
+		.formAge {
+			margin-top: 65px;
+		}
+		.formAge div {
 			display: flex;
 			justify-content: space-between;
-			@media all and (max-width: 755px){
+			@media all and (max-width: 755px) {
 				justify-content: center;
 			}
 		}
 		h2 {
 			font-size: 2.827rem;
 			background: $colorTwo;
-			margin:0;
+			margin: 0;
 			padding: 2px 0;
 			text-align: center;
+			@media all and (min-width: 845px) {
+				width: 100%;
+				position: absolute;
+				left: 0;
+				top: 0;
+			}
 		}
-		fieldset{
+		fieldset {
 			margin-top: 20px;
 			legend {
 				text-align: center;
@@ -116,7 +133,7 @@ section.userInfoInput {
 		.flexme {
 			display: flex;
 			justify-content: space-around;
-			@media all and (max-width: 755px){
+			@media all and (max-width: 755px) {
 				justify-content: center;
 			}
 		}
@@ -133,11 +150,11 @@ section.userInfoInput {
 			font-size: 3.998rem;
 		}
 	}
-	
-	.country, option {
+	.country,
+	option {
 		width: 100%;
 		text-align: center;
-		@media all and (max-width: 755px){
+		@media all and (max-width: 755px) {
 			width: 50%;
 			margin: 0 auto;
 			display: block;
@@ -145,27 +162,30 @@ section.userInfoInput {
 	}
 }
 
-		input {
-			border: none;
-		}
-		input[type=number]{
-			border-bottom: 2px solid lightgrey;
-			margin: 0 15px;
-			text-align: center;
-		}
+input {
+	border: none;
+}
+
+input[type=number] {
+	border-bottom: 2px solid lightgrey;
+	margin: 0 15px;
+	text-align: center;
+}
+
 input[type=submit] {
-		position: relative;
-		text-align: center;
-		display: block;
-		margin: 0 auto;
-		padding: 30px;
-		background: none;
-		border: 4px solid $colorTwo;
-		margin-top: 20px;
-		font-family: $headerFont;
-		font-size: 1.999rem;
-		transition: background 0.5s ;
-	}
-	input[type=submit]:hover {
-		background: $colorTwo;
-	}
+	position: relative;
+	text-align: center;
+	display: block;
+	margin: 0 auto;
+	padding: 30px;
+	background: none;
+	border: 4px solid $colorTwo;
+	margin-top: 20px;
+	font-family: $headerFont;
+	font-size: 1.999rem;
+	transition: background 0.5s;
+}
+
+input[type=submit]:hover {
+	background: $colorTwo;
+}

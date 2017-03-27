@@ -213,7 +213,7 @@ myApp.createMasterCountryList = function() {
 		finalCountryObject[finalizedCountries[i].name] = finalizedCountries[i];
 	}
 	myApp.finalCountryList = finalCountryObject;
-	for (country in myApp.finalCountryList) {
+	for (let country in myApp.finalCountryList) {
 		$('.country').append('<option val="' + myApp.finalCountryList[country].name.replace(/\s/gi, '_') + '">' + myApp.finalCountryList[country].name + '</option>');
 	}
 };
@@ -317,7 +317,7 @@ myApp.createMasterSalariesList = function(leftData, rightData) {
 	const leftSalaries = leftData[0].salaries;
 	const rightSalaries = rightData[0].salaries;
 	const salariesList = {};
-	for (job in leftSalaries) {
+	for (let job in leftSalaries) {
 		let jobTitle = leftSalaries[job]['job']['title'];
 		let jobSalaries = leftSalaries[job]['salary_percentiles'];
 		salariesList[jobTitle] = {};
@@ -345,7 +345,7 @@ myApp.getAverageSalary = function() {
 	let runningTotalLeft = 0;
 	let runningTotalRight = 0;
 	let counter = 0;
-	for (job in myApp.jobSalariesList) {
+	for (let job in myApp.jobSalariesList) {
 		runningTotalLeft = runningTotalLeft + myApp.jobSalariesList[job][leftCountry]['percentile_50'];
 		runningTotalRight = runningTotalRight + myApp.jobSalariesList[job][rightCountry]['percentile_50'];
 		counter++;
@@ -359,7 +359,7 @@ myApp.getAverageSalary = function() {
 }
 
 myApp.populateJobList = function() {
-	for (job in myApp.jobSalariesList) {
+	for (let job in myApp.jobSalariesList) {
 		$('.jobInfo__select').append('<option val="' + myApp.jobSalariesList[job].title.replace(/\s/gi, '_') + '">' + myApp.jobSalariesList[job].title + '</option>')
 	}
 	$('.jobLoading').remove();
@@ -371,6 +371,7 @@ myApp.chartJobs = function(job) {
 	let leftCountry = myApp.userInfo.country;
 	let rightCountry = myApp.otherPersonInfo.country;
 	let jobTitle;
+	let dataArray;
 	if (job === undefined) {
 		jobTitle = 'Overall Average'
 	} else {
@@ -605,7 +606,7 @@ myApp.createGlobalAgePopDataArrays = function() {
 	myApp.globalAgePopArrays.females = {}
 	myApp.globalAgePopArrays.females.labels = [];
 	myApp.globalAgePopArrays.females.numbers = [];
-	for (country in myApp.finalCountryList) {
+	for (let country in myApp.finalCountryList) {
 		let countryLabel = myApp.finalCountryList[country].name;
 		let countryMalePop = myApp.finalCountryList[country].populationOfAge.males;
 		let countryFemalePop = myApp.finalCountryList[country].populationOfAge.females;
