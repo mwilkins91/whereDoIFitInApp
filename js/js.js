@@ -13,6 +13,8 @@ myApp.events = function() {
 	});
 	$('.otherPerson__Form').on('submit', function(event) {
 		event.preventDefault();
+		$('.goButton').val('Loading...');
+		$('.goButton').attr('disabled', 'true');
 		myApp.otherPersonInfo.country = $('.otherPerson__Form .country').val();
 		$('.otherPersonTitle').text(`If you lived in ${myApp.otherPersonInfo.country}`)
 		myApp.getDateOfDeath('otherPerson');
@@ -767,7 +769,7 @@ myApp.chartGlobalAgeCompare = function(numberOfageYearOlds, numberOfHumansMinusA
 };
 
 myApp.loadPhaseTwo = function() {
-	$('.otherPerson__Form').fadeOut('slow');
+	$('.landingSplash').fadeOut('slow');
 	const countryLeftCheck = myApp.getSalaryInfo(myApp.finalCountryList[myApp.userInfo.country].href + 'salaries');
 	const countryRightCheck = myApp.getSalaryInfo(myApp.finalCountryList[myApp.otherPersonInfo.country].href + 'salaries');
 	$.when(countryLeftCheck, countryRightCheck).done((leftData, rightData) => {

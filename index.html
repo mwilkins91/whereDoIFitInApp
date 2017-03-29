@@ -72,7 +72,8 @@
 					<select class="country" name="otherPersonCountry" id="otherPersonCountry">
 						<option class="loading" value="">loading...</option>
 					</select>
-					<input type="submit" value="Show me some comparisons">
+					<input class="goButton" type="submit" value="Show me some comparisons">
+
 				</fieldset>
 			</form>
 		</section>
@@ -80,9 +81,9 @@
 			<section class="countDown">
 				<div class="countdownText">
 					<h2>Life Expectancy</h2>
-					<p>By looking at the life expectancy for the average <span class="genderText">male</span> in <span class="countryText">Canada</span>, and the health statistics for your age group, we have generated a countdown timer.</p>
+					<p>By looking at the life expectancy for the average <span class="bold"><span class="genderText">male</span> in <span class="countryText">Canada</span></span>, and the health statistics for your age group, we have generated a countdown timer.</p>
 					<p>Scroll down to view how much longer you are expected to live, and then take a look at the countdown for your comparison country.</p>
-					<p>Notice that if you lived in <span class="otherPersonCountryText">the USA</span> you would <span class="gainLoss">lose</span> an estimated <span class="yearsText">1</span> year<span class="pluralSyear">(s)</span>, <span class="daysText">2</span> day<span class="pluralSday">(s)</span>, <span class="hoursText">3</span> hour<span class="pluralShour">(s)</span>, and <span class="minutesText">4</span> minute<span class="pluralSminute">(s)</span> <span class="ofFor">of</span> your life.</p>
+					<p>Notice that <span class="bold">if you lived in <span class="otherPersonCountryText">the USA</span></span> you would <em class="bold gainLoss">lose</em> an estimated <span class="bold"><span class="yearsText">1</span> year<span class="pluralSyear">(s)</span>, <span class="daysText">2</span> day<span class="pluralSday">(s)</span>, <span class="hoursText">3</span> hour<span class="pluralShour">(s)</span>, and <span class="minutesText">4</span> minute<span class="pluralSminute">(s)</span> <span class="ofFor">of</span> your life.</span></p>
 				</div>
 				<div class="appArea__Flex wrapper countDownSection">
 					<section class="userCountdown countdown">
@@ -164,7 +165,7 @@
 			<section class="globalPopVsAge">
 				<h2>Global population and <span class="ageText">age tag</span> Year Olds.</h2>
 				<p>Reflect on what we have learned so far, in that only a very small fraction of people born at the same time as you live in the same country as you. Think also of the fact that only half of that small fraction is also the same gender as you. Now consider that of the world's population, only a small fraction was born the same year you were.</p>
-				<p>In the graph below, the colored section represents the entirety of the previous chart, as well as all of the members of the opposite gender also born in the same year as you.</p>
+				<p>In the graph below, <span class="bold">the colored section represents the entirety of the previous chart</span>, as well as all of the members of the opposite gender also born in the same year as you.</p>
 				<p>That means the colored section of the pie chart is many magnitudes of size larger than your demographic. If we were to render how small of a fraction your demographic makes up of the whole chart, it would not even be visible.</p>
 				<div class="globalPopVsAge__container chart__container">
 					<canvas id="globalPopVsAgeChart" class="globalPopVsAgeChart chart"></canvas>
